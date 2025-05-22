@@ -3,9 +3,24 @@ class FinanceManager {
     constructor() {
         this.expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         this.incomes = JSON.parse(localStorage.getItem('incomes')) || [];
+        this.loadThemePreference(); // Cargar preferencia de tema al iniciar
         this.initializeEventListeners();
         this.updateUI();
         this.initializeTooltips();
+        this.initializeMenuToggle(); // Inicializar funcionalidad del menú
+        this.initializeNavigation(); // Inicializar funcionalidad de navegación
+    }
+
+    // Cargar preferencia de tema desde localStorage
+    loadThemePreference() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro';
+        }
     }
 
     // Inicializar event listeners
@@ -32,8 +47,62 @@ class FinanceManager {
         // Botón de descarga
         document.getElementById('downloadCSV').addEventListener('click', () => this.downloadCSV());
 
+        // Botón de cambio de tema
+        document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+
         // Inicializar tooltips
         this.initializeTooltips();
+    }
+
+    // Inicializar la funcionalidad del menú expandible
+    initializeMenuToggle() {
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        const contentWrapper = document.querySelector('.content-wrapper');
+
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('expanded');
+            document.body.classList.toggle('menu-open'); // Clase para empujar contenido en móvil
+        });
+
+        // Cerrar menú al hacer clic fuera en móvil (opcional, requiere detección de clic fuera)
+        // También puedes cerrarlo al hacer clic en un enlace del menú
+        mainNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) { // Cerrar solo en móviles
+                    mainNav.classList.remove('expanded');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        });
+    }
+
+    // Inicializar funcionalidad de navegación (smooth scroll)
+    initializeNavigation() {
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const sectionId = link.getAttribute('data-section');
+                if (sectionId) { // Asegurarse de que el data-section no esté vacío
+                    e.preventDefault(); // Prevenir el comportamiento por defecto del enlace
+                    if (sectionId === 'home') {
+                         // Desplazarse al inicio de la página o a la primera sección relevante
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        const targetSection = document.getElementById(sectionId);
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+
+                    // Cerrar menú en móvil después de hacer clic (si está abierto)
+                     const mainNav = document.getElementById('mainNav');
+                     if (mainNav.classList.contains('expanded') && window.innerWidth <= 768) {
+                         mainNav.classList.remove('expanded');
+                         document.body.classList.remove('menu-open');
+                     }
+                }
+            });
+        });
     }
 
     // Inicializar tooltips
@@ -59,6 +128,21 @@ class FinanceManager {
                 }
             });
         });
+    }
+
+    // Alternar tema (claro/oscuro)
+    toggleTheme() {
+        if (document.body.classList.contains('dark-mode')) {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro';
+        } else {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+        }
+        // Puede que necesites actualizar los gráficos aquí si sus colores no responden a las variables CSS
+        this.updateCharts(this.getFilteredData().expenses, this.getFilteredData().incomes);
     }
 
     // Agregar nuevo gasto
