@@ -9,11 +9,34 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-wallet"></i> Control de Gastos e Ingresos Familiares</h1>
-        
+    <div class="theme-switcher">
+        <button id="themeToggle">
+            <i class="fas fa-moon"></i> Modo Oscuro
+        </button>
+    </div>
+
+    <header>
+        <div class="container header-content">
+            <h1><i class="fas fa-wallet"></i> Control de Gastos e Ingresos Familiares</h1>
+            <button id="menuToggle" class="menu-toggle-btn">
+                <i class="fas fa-bars"></i> Menú
+            </button>
+        </div>
+    </header>
+
+    <nav id="mainNav" class="main-nav">
+        <ul>
+            <li><a href="#" data-section="home"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="#" data-section="expenseFormSection"><i class="fas fa-receipt"></i> Gastos</a></li>
+            <li><a href="#" data-section="incomeFormSection"><i class="fas fa-money-bill-wave"></i> Ingresos</a></li>
+            <li><a href="#" data-section="summarySection"><i class="fas fa-chart-pie"></i> Resumen</a></li>
+            <li><a href="#" data-section=""><i class="fas fa-cog"></i> Configuración</a></li>
+        </ul>
+    </nav>
+
+    <div class="content-wrapper container">
         <!-- Formulario de registro de ingresos -->
-        <section class="form-section income-section">
+        <section id="incomeFormSection" class="form-section income-section">
             <h2><i class="fas fa-money-bill-wave"></i> Registrar Nuevo Ingreso</h2>
             <p class="section-help">Complete el formulario para registrar un nuevo ingreso familiar.</p>
             <form id="incomeForm">
@@ -75,7 +98,7 @@
         </section>
 
         <!-- Formulario de registro de gastos -->
-        <section class="form-section expense-section">
+        <section id="expenseFormSection" class="form-section expense-section">
             <h2><i class="fas fa-receipt"></i> Registrar Nuevo Gasto</h2>
             <p class="section-help">Complete el formulario para registrar un nuevo gasto familiar.</p>
             <form id="expenseForm">
@@ -258,7 +281,7 @@
         </section>
 
         <!-- Resumen y gráficos -->
-        <section class="summary-section">
+        <section id="summarySection" class="summary-section">
             <h2><i class="fas fa-chart-pie"></i> Resumen Mensual</h2>
             <div class="summary-container">
                 <div class="summary-cards">

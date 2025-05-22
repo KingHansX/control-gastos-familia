@@ -10,6 +10,72 @@
     --expense-color: #ff6b6b;
     --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
+    
+    /* Variables de tema - Modo Claro */
+    --body-bg-light: #f9f9f9;
+    --section-bg-light: white;
+    --text-color-light: #333;
+    --heading-color-light: #333;
+    --border-color-light: #ddd;
+    --table-header-bg-light: var(--secondary-color);
+    --table-row-hover-light: #f8f9fa;
+    --help-text-color-light: #666;
+    --tooltip-bg-light: rgba(0, 0, 0, 0.8);
+    --tooltip-text-light: white;
+    --section-help-bg-light: #f8f9fa;
+    --nav-bg-light: #e9ecef; /* Color para el menú de navegación en modo claro */
+    --nav-link-color-light: #333;
+    --nav-link-hover-light: #4a90e2;
+
+    /* Aplicar variables del tema claro por defecto */
+    --body-bg: var(--body-bg-light);
+    --section-bg: var(--section-bg-light);
+    --text-color-body: var(--text-color-light);
+    --heading-color: var(--heading-color-light);
+    --border-color-main: var(--border-color-light);
+    --table-header-bg: var(--table-header-bg-light);
+    --table-row-hover: var(--table-row-hover-light);
+    --help-text-color-main: var(--help-text-color-light);
+    --tooltip-bg: var(--tooltip-bg-light);
+    --tooltip-text: var(--tooltip-text-light);
+    --section-help-bg: var(--section-help-bg-light);
+    --nav-bg: var(--nav-bg-light);
+    --nav-link-color: var(--nav-link-color-light);
+    --nav-link-hover: var(--nav-link-hover-light);
+}
+
+/* Variables de tema - Modo Oscuro */
+body.dark-mode {
+    --body-bg-dark: #1a1a1a;
+    --section-bg-dark: #2d2d2d;
+    --text-color-dark: #f5f5f5;
+    --heading-color-dark: #f5f5f5;
+    --border-color-dark: #444;
+    --table-header-bg-dark: #333;
+    --table-row-hover-dark: #333;
+    --help-text-color-dark: #ccc;
+    --tooltip-bg-dark: rgba(255, 255, 255, 0.9);
+    --tooltip-text-dark: #333;
+    --section-help-bg-dark: #333;
+    --nav-bg-dark: #333; /* Color para el menú de navegación en modo oscuro */
+    --nav-link-color-dark: #f5f5f5;
+    --nav-link-hover-dark: #4a90e2;
+
+    /* Aplicar variables del tema oscuro */
+    --body-bg: var(--body-bg-dark);
+    --section-bg: var(--section-bg-dark);
+    --text-color-body: var(--text-color-dark);
+    --heading-color: var(--heading-color-dark);
+    --border-color-main: var(--border-color-dark);
+    --table-header-bg: var(--table-header-bg-dark);
+    --table-row-hover: var(--table-row-hover-dark);
+    --help-text-color-main: var(--help-text-color-dark);
+    --tooltip-bg: var(--tooltip-bg-dark);
+    --tooltip-text: var(--tooltip-text-dark);
+    --section-help-bg: var(--section-help-bg-dark);
+    --nav-bg: var(--nav-bg-dark);
+    --nav-link-color: var(--nav-link-color-dark);
+    --nav-link-hover: var(--nav-link-hover-dark);
 }
 
 /* Estilos generales */
@@ -22,9 +88,10 @@
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     line-height: 1.6;
-    color: var(--text-color);
-    background-color: #f9f9f9;
+    color: var(--text-color-body); /* Usar variable de tema */
+    background-color: var(--body-bg); /* Usar variable de tema */
     font-size: 16px;
+    transition: background-color 0.5s ease, color 0.5s ease; /* Transición suave */
 }
 
 .container {
@@ -33,10 +100,15 @@ body {
     padding: 2rem;
 }
 
+.content-wrapper {
+    padding-top: 2rem; /* Espacio para el header/nav */
+}
+
 h1, h2, h3 {
     margin-bottom: 1.5rem;
-    color: var(--text-color);
+    color: var(--heading-color); /* Usar variable de tema */
     font-weight: 600;
+    transition: color 0.5s ease; /* Transición suave */
 }
 
 h1 {
@@ -57,14 +129,164 @@ h3 {
     font-size: 1.5rem;
 }
 
+/* Botón de cambio de tema */
+.theme-switcher {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+#themeToggle {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#themeToggle i {
+    pointer-events: none; /* Para que el clic funcione en el botón */
+}
+
+#themeToggle:hover {
+    background-color: #357abd;
+    transform: scale(1.1);
+}
+
+/* Header y Navegación */
+header {
+    background-color: var(--body-bg); /* Usar color de fondo del tema */
+    padding: 1rem 0;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    transition: background-color 0.5s ease;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-toggle-btn {
+    background-color: transparent;
+    color: var(--text-color-body); /* Usar color de texto del tema */
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.menu-toggle-btn:hover {
+    color: var(--primary-color);
+}
+
+.main-nav {
+    background-color: var(--nav-bg); /* Usar variable de tema */
+    padding: 1rem 0;
+    box-shadow: var(--shadow);
+    transition: background-color 0.5s ease;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0; /* Eliminar padding por defecto de la lista */
+    margin: 0; /* Eliminar margen por defecto de la lista */
+}
+
+.main-nav li {
+    margin: 0;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: var(--nav-link-color); /* Usar variable de tema */
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem; /* Añadir padding a los enlaces */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+.main-nav a i {
+    margin-right: 0.5rem;
+}
+
+.main-nav a:hover {
+    color: var(--nav-link-hover); /* Usar variable de tema */
+    background-color: rgba(0, 0, 0, 0.05); /* Efecto hover sutil */
+}
+
+/* Estilos para el menú responsive */
+@media (max-width: 768px) {
+    .header-content {
+        padding: 0 1rem; /* Ajustar padding en móvil */
+    }
+
+    .main-nav {
+        position: fixed;
+        top: 60px; /* Altura del header, ajustar si es necesario */
+        left: 0;
+        width: 250px; /* Ancho del menú lateral */
+        height: calc(100% - 60px); /* Altura ajustada */
+        transform: translateX(-100%); /* Ocultar menú inicialmente */
+        transition: transform 0.3s ease-in-out;
+        z-index: 400;
+        padding: 1rem 0;
+        background-color: var(--nav-bg); /* Usar variable de tema */
+    }
+
+    .main-nav.expanded {
+        transform: translateX(0); /* Mostrar menú */
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        align-items: flex-start; /* Alinear items a la izquierda */
+        gap: 0.5rem; /* Reducir espacio entre items */
+        padding: 0 1rem; /* Padding interno del menú */
+    }
+
+    .main-nav li {
+        width: 100%; /* Que cada item ocupe todo el ancho */
+    }
+
+    .main-nav a {
+        padding: 0.8rem 1rem; /* Aumentar padding para área de clic */
+        justify-content: flex-start; /* Alinear texto e icono a la izquierda */
+    }
+
+    .content-wrapper {
+        margin-left: 0; /* Resetear margen en móvil */
+        transition: margin-left 0.3s ease-in-out;
+    }
+
+    body.menu-open .content-wrapper {
+        margin-left: 250px; /* Empujar contenido cuando el menú está abierto */
+    }
+}
+
 /* Secciones */
 section {
-    background: white;
+    background: var(--section-bg); /* Usar variable de tema */
     border-radius: 15px;
     padding: 2rem;
     margin-bottom: 2rem;
     box-shadow: var(--shadow);
-    transition: var(--transition);
+    transition: background-color 0.5s ease;
 }
 
 section:hover {
@@ -73,12 +295,13 @@ section:hover {
 
 .section-help {
     font-size: 1.1rem;
-    color: #666;
+    color: var(--help-text-color-main); /* Usar variable de tema */
     margin-bottom: 1.5rem;
     padding: 0.5rem;
-    background-color: #f8f9fa;
+    background-color: var(--section-help-bg); /* Usar variable de tema */
     border-radius: 8px;
     border-left: 4px solid var(--primary-color);
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 /* Secciones de formularios */
@@ -100,16 +323,13 @@ section:hover {
     margin-bottom: 2.5rem;
 }
 
-.form-group label {
-    margin-bottom: 0.5rem;
-}
-
 label {
     display: block;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
     font-size: 1.2rem;
-    font-weight: 500;
-    color: var(--text-color);
+    font-weight: bold; /* Usar font-weight: bold; */
+    color: var(--text-color-body); /* Usar variable de tema */
+    transition: color 0.5s ease;
 }
 
 label i {
@@ -121,9 +341,11 @@ input, select {
     width: 100%;
     padding: 1rem;
     font-size: 1.1rem;
-    border: 2px solid var(--border-color);
+    border: 2px solid var(--border-color-main); /* Usar variable de tema */
     border-radius: 8px;
-    transition: var(--transition);
+    transition: border-color 0.5s ease, box-shadow 0.5s ease, background-color 0.5s ease, color 0.5s ease;
+    background-color: var(--section-bg); /* Usar variable de tema */
+    color: var(--text-color-body); /* Usar variable de tema */
 }
 
 input:focus, select:focus {
@@ -134,13 +356,14 @@ input:focus, select:focus {
 
 .help-text {
     display: block;
-    margin-top: 0.2rem;
+    margin-top: 0.3rem;
     font-size: 0.9rem;
-    color: #666;
+    color: var(--help-text-color-main); /* Usar variable de tema */
     font-style: italic;
     width: 100%;
     box-sizing: border-box;
     line-height: 1.3;
+    transition: color 0.5s ease;
 }
 
 /* Botones */
@@ -219,12 +442,13 @@ button {
     display: block;
     margin-top: 0.3rem;
     font-size: 0.9rem;
-    color: #666;
+    color: var(--help-text-color-main); /* Usar variable de tema */
     font-style: italic;
     width: 100%;
     box-sizing: border-box;
     line-height: 1.3;
     flex-shrink: 0;
+    transition: color 0.5s ease;
 }
 
 .date-inputs {
@@ -240,45 +464,13 @@ button {
     margin-bottom: 0;
 }
 
-/* Ajuste para los campos de fecha para asegurar que no se desborden */
 .date-inputs input[type="date"] {
     min-width: 0;
 }
 
-/* Ajuste específico para los select dentro de los grupos de filtro para evitar que sean demasiado anchos */
 .filter-group select {
     width: 100%;
     max-width: 100%;
-}
-
-/* Intentar forzar la disposición en filas separadas para los primeros dos filtros en ciertos anchos */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .filters {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (min-width: 1025px) {
-    .filters {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-
-    /* Ajustar tamaños relativos para dar más espacio a las fechas */
-    .filters .filter-group:nth-child(1) {
-        grid-column: span 2;
-    }
-
-    .filters .filter-group:nth-child(2) {
-        grid-column: span 1;
-    }
-
-    .filters .filter-group:nth-child(3) {
-        grid-column: span 1;
-    }
-
-    .filters .filter-group:nth-child(4) {
-        grid-column: span 2;
-    }
 }
 
 /* Tabla */
@@ -298,13 +490,15 @@ table {
 th, td {
     padding: 1.2rem;
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color-main); /* Usar variable de tema */
+    transition: border-color 0.5s ease;
 }
 
 th {
-    background-color: var(--secondary-color);
+    background-color: var(--table-header-bg); /* Usar variable de tema */
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--heading-color); /* Usar variable de tema */
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 th i {
@@ -313,10 +507,11 @@ th i {
 }
 
 tr:hover {
-    background-color: #f8f9fa;
+    background-color: var(--table-row-hover); /* Usar variable de tema */
+    transition: background-color 0.5s ease;
 }
 
-/* Resumen y gráficos */
+/* Resumen */
 .summary-container {
     display: grid;
     gap: 2rem;
@@ -329,12 +524,12 @@ tr:hover {
 }
 
 .summary-card {
-    background: white;
+    background: var(--section-bg); /* Usar variable de tema */
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: var(--shadow);
     text-align: center;
-    transition: var(--transition);
+    transition: var(--transition), background-color 0.5s ease;
 }
 
 .summary-card:hover {
@@ -343,9 +538,10 @@ tr:hover {
 }
 
 .summary-card h3 {
-    color: var(--text-color);
+    color: var(--heading-color); /* Usar variable de tema */
     margin-bottom: 1rem;
     font-size: 1.3rem;
+    transition: color 0.5s ease;
 }
 
 .summary-card h3 i {
@@ -375,10 +571,11 @@ tr:hover {
 }
 
 .chart {
-    background: white;
+    background: var(--section-bg); /* Usar variable de tema */
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: var(--shadow);
+    transition: background-color 0.5s ease;
 }
 
 /* Botón de descarga */
@@ -439,6 +636,16 @@ tr:hover {
     input, select, button {
         font-size: 16px; /* Previene zoom en iOS */
     }
+
+    .main-nav ul {
+        flex-direction: column; /* Apilar elementos del menú en móvil */
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .main-nav a {
+        justify-content: center;
+    }
 }
 
 /* Animaciones */
@@ -465,90 +672,11 @@ section {
     }
 }
 
-/* Estilos para modo oscuro */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text-color: #f5f5f5;
-        --secondary-color: #2d2d2d;
-        --border-color: #444;
-    }
-
-    body {
-        background-color: #1a1a1a;
-    }
-
-    section {
-        background: #2d2d2d;
-    }
-
-    .section-help {
-        background-color: #333;
-        color: #ccc;
-    }
-
-    input, select {
-        background-color: #333;
-        color: #f5f5f5;
-    }
-
-    th {
-        background-color: #333;
-    }
-
-    tr:hover {
-        background-color: #333;
-    }
-
-    .summary-card {
-        background: #2d2d2d;
-    }
-
-    .chart {
-        background: #2d2d2d;
-    }
-
-    .help-text {
-        color: #ccc;
-    }
-
-    .filters .filter-group .help-text {
-        color: #ccc;
-    }
-}
-
-/* Notificaciones */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    color: white;
-    font-size: 1.1rem;
-    z-index: 1000;
-    transform: translateY(-100%);
-    opacity: 0;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.notification.success {
-    background-color: var(--success-color);
-}
-
-.notification.info {
-    background-color: var(--primary-color);
-}
-
-.notification.error {
-    background-color: var(--danger-color);
-}
-
 /* Tooltips */
 .tooltip {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
+    background-color: var(--tooltip-bg); /* Usar variable de tema */
+    color: var(--tooltip-text); /* Usar variable de tema */
     padding: 0.5rem 1rem;
     border-radius: 4px;
     font-size: 0.9rem;
@@ -567,19 +695,7 @@ section {
     transform: translateX(-50%);
     border-width: 0 5px 5px 5px;
     border-style: solid;
-    border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
-}
-
-/* Mejoras de accesibilidad para modo oscuro */
-@media (prefers-color-scheme: dark) {
-    .tooltip {
-        background-color: rgba(255, 255, 255, 0.9);
-        color: #333;
-    }
-
-    .tooltip::after {
-        border-color: transparent transparent rgba(255, 255, 255, 0.9) transparent;
-    }
+    border-color: transparent transparent var(--tooltip-bg) transparent; /* Usar variable de tema */
 }
 
 /* Mejoras de accesibilidad para alto contraste */
@@ -590,47 +706,6 @@ section {
 
     .tooltip {
         border: 2px solid currentColor;
-    }
-}
-
-/* Mejoras de accesibilidad para reducción de movimiento */
-@media (prefers-reduced-motion: reduce) {
-    .notification,
-    .tooltip,
-    button,
-    input,
-    select,
-    .summary-card,
-    tr {
-        transition: none !important;
-        animation: none !important;
-    }
-}
-
-/* Mejoras de accesibilidad para tamaño de texto */
-@media (min-width: 1200px) {
-    body {
-        font-size: 18px;
-    }
-
-    h1 {
-        font-size: 2.8rem;
-    }
-
-    h2 {
-        font-size: 2.2rem;
-    }
-
-    h3 {
-        font-size: 1.7rem;
-    }
-
-    .btn-large {
-        font-size: 1.3rem;
-    }
-
-    .notification {
-        font-size: 1.2rem;
     }
 }
 
@@ -683,27 +758,10 @@ select:active {
     }
 }
 
-/* Mejoras de accesibilidad para filtros */
-.filters-section .form-group {
-    margin-bottom: 1.5rem;
-}
-
-.filters-section .filter-group .help-text {
-    position: static;
-    margin-top: 0.5rem;
-}
-
-.filters .filter-group {
-    margin-bottom: 2rem;
-}
-
-.filters .filter-group label {
-    margin-bottom: 0.5rem;
-}
-
-.filters .filter-group .help-text {
-    margin-top: 0.2rem;
-    position: static;
+/* Mejoras de accesibilidad para formularios */
+.form-group {
+    position: relative;
+    margin-bottom: 2.5rem;
 }
 
 /* Mejoras de accesibilidad para botones */
@@ -762,8 +820,16 @@ select:active {
     opacity: 1;
 }
 
-@media (prefers-color-scheme: dark) {
-    .chart::before {
-        background: rgba(0, 0, 0, 0.1);
-    }
+/* Ajustes generales para transiciones de tema */
+body, section, .section-help, label, input, select, th, td, .summary-card, .chart, .tooltip, .tooltip::after, .main-nav, .main-nav a, .menu-toggle-btn {
+    transition: 
+        background-color 0.5s ease,
+        color 0.5s ease,
+        border-color 0.5s ease,
+        box-shadow 0.5s ease;
+}
+
+/* Asegurar que los placehoders tengan color legible en modo oscuro */
+body.dark-mode input::placeholder, body.dark-mode select::placeholder {
+    color: #aaa; /* Un color claro para el placeholder */
 } 
