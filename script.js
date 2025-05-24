@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Configuración de event listeners
 function setupEventListeners() {
     // Menú lateral
-    menuToggle.addEventListener('click', toggleMenu);
+    if (menuToggle) menuToggle.addEventListener('click', toggleMenu);
     
     // Cerrar menú al hacer clic fuera
     document.addEventListener('click', (e) => {
@@ -47,22 +47,31 @@ function setupEventListeners() {
     });
 
     // Cambio de tema
-    themeToggle.addEventListener('click', toggleTheme);
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
 
     // Formularios
-    document.getElementById('incomeForm').addEventListener('submit', handleIncomeSubmit);
-    document.getElementById('expenseForm').addEventListener('submit', handleExpenseSubmit);
-    document.getElementById('settingsForm').addEventListener('submit', handleSettingsSubmit);
+    const incomeForm = document.getElementById('incomeForm');
+    if (incomeForm) incomeForm.addEventListener('submit', handleIncomeSubmit);
+    const expenseForm = document.getElementById('expenseForm');
+    if (expenseForm) expenseForm.addEventListener('submit', handleExpenseSubmit);
+    const settingsForm = document.getElementById('settingsForm');
+    if (settingsForm) settingsForm.addEventListener('submit', handleSettingsSubmit);
 
     // Filtros
-    document.getElementById('startDate').addEventListener('change', updateTransactionsTable);
-    document.getElementById('endDate').addEventListener('change', updateTransactionsTable);
-    document.getElementById('filterPerson').addEventListener('change', updateTransactionsTable);
-    document.getElementById('filterType').addEventListener('change', updateTransactionsTable);
-    document.getElementById('filterCategory').addEventListener('change', updateTransactionsTable);
+    const startDate = document.getElementById('startDate');
+    if (startDate) startDate.addEventListener('change', updateTransactionsTable);
+    const endDate = document.getElementById('endDate');
+    if (endDate) endDate.addEventListener('change', updateTransactionsTable);
+    const filterPerson = document.getElementById('filterPerson');
+    if (filterPerson) filterPerson.addEventListener('change', updateTransactionsTable);
+    const filterType = document.getElementById('filterType');
+    if (filterType) filterType.addEventListener('change', updateTransactionsTable);
+    const filterCategory = document.getElementById('filterCategory');
+    if (filterCategory) filterCategory.addEventListener('change', updateTransactionsTable);
 
     // Exportar datos
-    document.getElementById('exportData').addEventListener('click', exportToCSV);
+    const exportData = document.getElementById('exportData');
+    if (exportData) exportData.addEventListener('click', exportToCSV);
 }
 
 // Funciones de navegación
@@ -330,7 +339,9 @@ function exportToCSV() {
 
 // Funciones de gráficos
 function updateBalanceChart() {
-    const ctx = document.getElementById('balanceChart').getContext('2d');
+    const canvas = document.getElementById('balanceChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     const last6Months = Array.from({length: 6}, (_, i) => {
         const date = new Date();
         date.setMonth(date.getMonth() - i);
@@ -410,7 +421,9 @@ function updateBalanceChart() {
 }
 
 function updateExpensesByCategoryChart() {
-    const ctx = document.getElementById('expensesByCategoryChart').getContext('2d');
+    const canvas = document.getElementById('expensesByCategoryChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     const expenses = transactions.filter(t => t.type === 'gasto');
     const categories = [...new Set(expenses.map(e => e.category))];
     
@@ -457,7 +470,9 @@ function updateExpensesByCategoryChart() {
 }
 
 function updateIncomeBySourceChart() {
-    const ctx = document.getElementById('incomeBySourceChart').getContext('2d');
+    const canvas = document.getElementById('incomeBySourceChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     const incomes = transactions.filter(t => t.type === 'ingreso');
     const sources = [...new Set(incomes.map(i => i.category))];
     
@@ -503,7 +518,9 @@ function updateIncomeBySourceChart() {
 }
 
 function updateMonthlyBalanceChart() {
-    const ctx = document.getElementById('monthlyBalanceChart').getContext('2d');
+    const canvas = document.getElementById('monthlyBalanceChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     const last12Months = Array.from({length: 12}, (_, i) => {
         const date = new Date();
         date.setMonth(date.getMonth() - i);

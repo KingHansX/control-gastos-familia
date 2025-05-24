@@ -1,31 +1,31 @@
 /* Variables globales */
 :root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --accent-color: #e74c3c;
-    --background-color: #f5f6fa;
-    --text-color: #2c3e50;
-    --border-color: #dcdde1;
-    --success-color: #27ae60;
-    --warning-color: #f39c12;
-    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --transition-speed: 0.3s;
+    --primary-color: #4a6d7c; /* Azul verdoso oscuro */
+    --secondary-color: #7ab8c7; /* Azul claro cálido */
+    --accent-color: #e74c3c; /* Rojo para gastos (mantener visibilidad) */
+    --background-color: #eff4f4; /* Fondo blanco azulado suave */
+    --text-color: #333333; /* Texto gris oscuro suave */
+    --border-color: #e0e0e0; /* Borde gris claro */
+    --success-color: #2ecc71; /* Verde para ingresos */
+    --warning-color: #e74c3c; /* Rojo para warning (igual que accent) */
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Sombra más suave */
+    --transition-speed: 0.4s; /* Transición un poco más lenta */
     
     /* Variables de tema - Modo Claro */
-    --body-bg-light: #f9f9f9;
-    --section-bg-light: white;
-    --text-color-light: #333;
-    --heading-color-light: #333;
-    --border-color-light: #ddd;
-    --table-header-bg-light: var(--secondary-color);
-    --table-row-hover-light: #f8f9fa;
-    --help-text-color-light: #666;
-    --tooltip-bg-light: rgba(0, 0, 0, 0.8);
+    --body-bg-light: var(--background-color);
+    --section-bg-light: #ffffff; /* Blanco puro para secciones en claro */
+    --text-color-light: var(--text-color);
+    --heading-color-light: var(--primary-color);
+    --border-color-light: var(--border-color);
+    --table-header-bg-light: var(--primary-color);
+    --table-row-hover-light: #f0f5f5; /* Resaltado suave */
+    --help-text-color-light: #555; /* Gris intermedio */
+    --tooltip-bg-light: rgba(0, 0, 0, 0.7); /* Un poco más transparente */
     --tooltip-text-light: white;
-    --section-help-bg-light: #f8f9fa;
-    --nav-bg-light: #e9ecef; /* Color para el menú de navegación en modo claro */
-    --nav-link-color-light: #333;
-    --nav-link-hover-light: #4a90e2;
+    --section-help-bg-light: #eef5f5; /* Fondo de ayuda suave */
+    --nav-bg-light: #ffffff; /* Blanco puro para el menú en claro */
+    --nav-link-color-light: var(--text-color);
+    --nav-link-hover-light: var(--secondary-color);
 
     /* Aplicar variables del tema claro por defecto */
     --body-bg: var(--body-bg-light);
@@ -46,20 +46,20 @@
 
 /* Variables de tema - Modo Oscuro */
 body.dark-mode {
-    --body-bg-dark: #1a1a1a;
-    --section-bg-dark: #2d2d2d;
-    --text-color-dark: #f5f5f5;
-    --heading-color-dark: #f5f5f5;
-    --border-color-dark: #444;
-    --table-header-bg-dark: #333;
-    --table-row-hover-dark: #333;
-    --help-text-color-dark: #ccc;
-    --tooltip-bg-dark: rgba(255, 255, 255, 0.9);
-    --tooltip-text-dark: #333;
-    --section-help-bg-dark: #333;
-    --nav-bg-dark: #333; /* Color para el menú de navegación en modo oscuro */
-    --nav-link-color-dark: #f5f5f5;
-    --nav-link-hover-dark: #4a90e2;
+    --body-bg-dark: #2c3e50; /* Fondo oscuro basado en primary anterior */
+    --section-bg-dark: #34495e; /* Fondo de sección oscuro */
+    --text-color-dark: #ecf0f1; /* Texto claro */
+    --heading-color-dark: #ecf0f1; /* Títulos claros */
+    --border-color-dark: #555; /* Borde oscuro */
+    --table-header-bg-dark: #3b536a; /* Encabezado de tabla oscuro */
+    --table-row-hover-dark: #46627f; /* Resaltado oscuro */
+    --help-text-color-dark: #bdc3c7; /* Gris claro para ayuda */
+    --tooltip-bg-dark: rgba(255, 255, 255, 0.8); /* Tooltip claro en oscuro */
+    --tooltip-text-dark: #333; /* Texto oscuro en tooltip claro */
+    --section-help-bg-dark: #3b536a; /* Fondo de ayuda oscuro */
+    --nav-bg-dark: #34495e; /* Menú oscuro */
+    --nav-link-color-dark: var(--text-color-dark);
+    --nav-link-hover-dark: var(--secondary-color);
 
     /* Aplicar variables del tema oscuro */
     --body-bg: var(--body-bg-dark);
@@ -86,9 +86,9 @@ body.dark-mode {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    font-family: 'Open Sans', sans-serif; /* Fuente un poco más cálida */
+    background-color: var(--body-bg); /* Usar variable de tema */
+    color: var(--text-color-body); /* Usar variable de tema */
     line-height: 1.6;
     margin: 0;
     padding: 0;
@@ -107,7 +107,7 @@ header {
 }
 
 .main-nav {
-    background-color: white;
+    background-color: var(--nav-bg); /* Usar variable de tema */
     box-shadow: var(--card-shadow);
     position: fixed;
     top: 0;
@@ -117,6 +117,7 @@ header {
     transition: left var(--transition-speed);
     z-index: 1000;
     padding-top: 20px; /* Añadimos espacio arriba */
+    border-right: 1px solid var(--border-color-main); /* Borde sutil */
 }
 
 .main-nav.active {
@@ -130,27 +131,28 @@ header {
 }
 
 .main-nav li {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color-main); /* Borde basado en tema */
 }
 
 .main-nav a {
     display: flex;
     align-items: center;
     padding: 1rem;
-    color: var(--text-color);
+    color: var(--nav-link-color); /* Color basado en tema */
     text-decoration: none;
-    transition: background-color var(--transition-speed);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
 .main-nav a:hover {
-    background-color: var(--background-color);
-    color: var(--secondary-color);
+    background-color: var(--table-row-hover); /* Usar color de hover de tabla */
+    color: var(--nav-link-hover); /* Color basado en tema */
 }
 
 .main-nav i {
     margin-right: 10px;
     width: 20px;
     text-align: center;
+    color: var(--secondary-color); /* Íconos con color secundario */
 }
 
 /* Contenido Principal */
@@ -176,12 +178,12 @@ h1 {
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 2rem;
-    color: var(--primary-color);
+    color: var(--primary-color); /* Título principal con primary color */
 }
 
 h2 {
     font-size: 2rem;
-    border-bottom: 3px solid var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color); /* Borde basado en secondary */
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
 }
@@ -193,22 +195,25 @@ h3 {
 /* Botón de cambio de tema */
 .theme-switcher {
     position: fixed;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 20px;
     z-index: 1000;
 }
 
 #themeToggle {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* Color basado en tema */
     color: white;
     border: none;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     font-size: 1.2rem;
     cursor: pointer;
     box-shadow: var(--card-shadow);
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #themeToggle i {
@@ -216,39 +221,40 @@ h3 {
 }
 
 #themeToggle:hover {
-    background-color: #357abd;
-    transform: scale(1.1);
+    background-color: var(--secondary-color); /* Color de hover */
+    transform: scale(1.05); /* Escala sutil */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Secciones */
 section {
     background: var(--section-bg); /* Usar variable de tema */
-    border-radius: 15px;
+    border-radius: 10px; /* Bordes más suaves */
     padding: 2rem;
     margin-bottom: 2rem;
     box-shadow: var(--card-shadow);
-    transition: background-color 0.5s ease;
+    transition: background-color 0.5s ease, box-shadow 0.3s;
 }
 
 section:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra de hover sutil */
 }
 
 .section-help {
-    font-size: 1.1rem;
+    font-size: 1rem; /* Tamaño un poco más pequeño */
     color: var(--help-text-color-main); /* Usar variable de tema */
     margin-bottom: 1.5rem;
-    padding: 0.5rem;
+    padding: 0.8rem 1.5rem; /* Padding ajustado */
     background-color: var(--section-help-bg); /* Usar variable de tema */
     border-radius: 8px;
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--secondary-color); /* Borde basado en secondary */
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 /* Secciones de formularios */
 .form-section {
-    background-color: white;
-    border-radius: 8px;
+    background-color: var(--section-bg); /* Usar variable de tema */
+    border-radius: 10px;
     padding: 2rem;
     margin-bottom: 2rem;
     box-shadow: var(--card-shadow);
@@ -259,7 +265,7 @@ section:hover {
 }
 
 .expense-section {
-    border-left: 4px solid var(--warning-color);
+    border-left: 4px solid var(--accent-color); /* Usar accent para gastos */
 }
 
 .form-group {
@@ -268,63 +274,76 @@ section:hover {
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-    font-weight: 500;
+    margin-bottom: 0.6rem; /* Espacio ajustado */
+    color: var(--text-color-body); /* Color basado en tema */
+    font-weight: 600; /* Peso de fuente */
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
+    padding: 0.9rem; /* Padding ajustado */
+    border: 1px solid var(--border-color-main); /* Borde basado en tema */
+    border-radius: 6px; /* Bordes más suaves */
     font-size: 1rem;
-    transition: border-color var(--transition-speed);
+    background-color: var(--body-bg); /* Fondo claro para inputs */
+    color: var(--text-color-body); /* Color de texto */
+    transition: border-color var(--transition-speed), box-shadow 0.2s;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: var(--secondary-color);
+    border-color: var(--secondary-color); /* Color de focus */
     outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--secondary-color-rgb, 122, 184, 199), 0.2); /* Sombra de focus sutil */
 }
 
 /* Botones */
 .btn-large {
-    background-color: var(--secondary-color);
+    background-color: var(--secondary-color); /* Color basado en tema */
     color: white;
-    padding: 1rem 2rem;
+    padding: 1rem 2.5rem; /* Padding ajustado */
     border: none;
-    border-radius: 4px;
+    border-radius: 6px; /* Bordes suaves */
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color var(--transition-speed);
+    font-size: 1.1rem; /* Tamaño un poco más grande */
+    font-weight: 600;
+    transition: background-color var(--transition-speed), transform 0.2s, box-shadow 0.2s;
+    display: inline-flex; /* Permite alinear icono y texto */
+    align-items: center;
+    gap: 10px; /* Espacio entre icono y texto */
 }
 
 .btn-large:hover {
-    background-color: #2980b9;
+    background-color: #63a0ad; /* Un tono un poco más oscuro de secondary */
+    transform: translateY(-2px); /* Efecto hover sutil */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-large i {
+    margin-right: 0; /* Eliminar margen extra del ícono en el botón */
 }
 
 .delete-btn {
-    padding: 0.8rem 1.5rem;
-    background-color: var(--warning-color);
+    padding: 0.7rem 1.2rem; /* Padding ajustado */
+    background-color: var(--accent-color); /* Usar accent para eliminar */
     color: white;
     border: none;
     border-radius: 6px;
-    font-size: 1.1rem;
+    font-size: 1rem; /* Tamaño ajustado */
     transition: var(--transition-speed);
 }
 
 .delete-btn:hover {
-    background-color: #e67e22;
+    background-color: #cc4132; /* Un tono un poco más oscuro de accent */
     transform: translateY(-2px);
 }
 
 /* Filtros */
 .filters-section {
-    background-color: white;
-    border-radius: 8px;
-    padding: 1.5rem;
+    background-color: var(--section-bg); /* Usar variable de tema */
+    border-radius: 10px;
+    padding: 1.8rem; /* Padding ajustado */
     margin-bottom: 2rem;
     box-shadow: var(--card-shadow);
 }
@@ -332,14 +351,27 @@ section:hover {
 .filters {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    gap: 1.5rem; /* Espacio entre filtros */
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: var(--text-color-body); /* Color basado en tema */
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.date-inputs input {
+    width: auto; /* Permitir que los inputs de fecha tomen su tamaño */
+    display: inline-block; /* Mostrar en línea */
+    margin-right: 10px; /* Espacio entre inputs de fecha */
 }
 
 /* Tabla */
 .table-container {
-    background-color: white;
-    border-radius: 8px;
-    padding: 1rem;
+    background-color: var(--section-bg); /* Usar variable de tema */
+    border-radius: 10px;
+    padding: 1.5rem; /* Padding ajustado */
     margin-bottom: 2rem;
     box-shadow: var(--card-shadow);
     overflow-x: auto;
@@ -351,62 +383,70 @@ table {
 }
 
 th, td {
-    padding: 1rem;
+    padding: 1rem 0.8rem; /* Padding ajustado */
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color-main); /* Borde basado en tema */
 }
 
 th {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); /* Fondo basado en primary */
     color: white;
+    font-weight: 600;
 }
 
 tr:hover {
-    background-color: var(--background-color);
+    background-color: var(--table-row-hover); /* Color de hover basado en tema */
 }
 
-/* Resumen */
-.summary-container {
-    display: grid;
-    gap: 2rem;
+.income {
+    color: var(--success-color); /* Color basado en tema */
+    font-weight: 600;
 }
 
-.summary-cards {
+.expense {
+    color: var(--accent-color); /* Color basado en tema */
+    font-weight: 600;
+}
+
+/* Resumen (Dashboard) */
+.dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado para cards más grandes */
     gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.summary-card {
+.dashboard-card {
     background: var(--section-bg); /* Usar variable de tema */
-    padding: 1.5rem;
+    padding: 1.5rem; /* Padding ajustado */
     border-radius: 10px;
     box-shadow: var(--card-shadow);
     text-align: center;
     transition: var(--transition-speed), background-color 0.5s ease;
+    border: 1px solid var(--border-color-main); /* Borde sutil */
 }
 
-.summary-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+.dashboard-card:hover {
+    transform: translateY(-3px); /* Efecto hover sutil */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.summary-card h3 {
+.dashboard-card h3 {
     color: var(--heading-color); /* Usar variable de tema */
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
+    margin-bottom: 0.8rem; /* Espacio ajustado */
+    font-size: 1.4rem; /* Tamaño ajustado */
     transition: color 0.5s ease;
 }
 
-.summary-card h3 i {
-    margin-right: 0.5rem;
-    color: var(--primary-color);
+.dashboard-card h3 i {
+    margin-right: 0.8rem;
+    color: var(--secondary-color); /* Íconos con color secundario */
 }
 
-.summary-card p {
-    font-size: 2rem;
+.dashboard-card p {
+    font-size: 2.2rem; /* Tamaño de fuente ajustado */
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--primary-color); /* Color basado en primary */
 }
 
 .positive-balance {
@@ -414,43 +454,119 @@ tr:hover {
 }
 
 .negative-balance {
-    color: var(--warning-color) !important;
+    color: var(--accent-color) !important; /* Usar accent para balance negativo */
 }
 
-.charts-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.chart {
+.chart-container {
     background: var(--section-bg); /* Usar variable de tema */
-    padding: 1.5rem;
+    padding: 1.5rem; /* Padding ajustado */
     border-radius: 10px;
     box-shadow: var(--card-shadow);
-    transition: background-color 0.5s ease;
+    margin-top: 1.5rem; /* Espacio arriba */
+}
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Ajustado para gráficos */
+    gap: 1.5rem;
+}
+
+.report-card {
+     background: var(--section-bg); /* Usar variable de tema */
+    padding: 1.5rem; /* Padding ajustado */
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+     transition: background-color 0.5s ease, box-shadow 0.3s;
+     border: 1px solid var(--border-color-main); /* Borde sutil */
+}
+
+.report-card:hover {
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.report-card h3 {
+     text-align: center; /* Centrar títulos de gráficos */
+     margin-bottom: 1.5rem;
 }
 
 /* Botón de descarga */
+.export-section {
+    text-align: center; /* Centrar el botón */
+    margin-top: 2.5rem; /* Más espacio arriba */
+}
+
 .download-btn {
-    display: flex;
+    display: inline-flex; /* Centrar el botón */
     align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    margin: 2rem auto;
-    padding: 1.2rem 2.5rem;
-    font-size: 1.2rem;
-    background-color: var(--success-color);
+    gap: 10px;
+    padding: 1.2rem 2.8rem; /* Padding ajustado */
+    font-size: 1.1rem; /* Tamaño ajustado */
+    background-color: var(--success-color); /* Color basado en tema */
     color: white;
     border: none;
-    border-radius: 8px;
-    transition: var(--transition-speed);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition-speed), transform 0.2s, box-shadow 0.2s;
 }
 
 .download-btn:hover {
-    background-color: #2ecc71;
-    transform: translateY(-2px);
+    background-color: #27ae60; /* Un tono un poco más oscuro */
+     transform: translateY(-2px);
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Configuración */
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.settings-card {
+    background: var(--section-bg); /* Usar variable de tema */
+    padding: 2rem; /* Padding ajustado */
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+     transition: background-color 0.5s ease, box-shadow 0.3s;
+     border: 1px solid var(--border-color-main); /* Borde sutil */
+}
+
+.settings-card:hover {
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card h3 {
+     margin-bottom: 1.5rem;
+}
+
+/* Botón de menú lateral */
+.menu-toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: var(--primary-color); /* Color basado en tema */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1100;
+    box-shadow: var(--card-shadow);
+    transition: background-color var(--transition-speed), box-shadow 0.3s, left var(--transition-speed);
+}
+
+.menu-toggle-btn:hover {
+    background-color: var(--secondary-color); /* Color de hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.main-nav.active ~ .menu-toggle-btn { /* Usar el selector de hermano general ~ */
+    left: 270px; /* Mover el botón cuando el menú está activo */
 }
 
 /* Responsive */
@@ -478,17 +594,17 @@ tr:hover {
     .main-nav {
         width: 100%;
         left: -100%;
+        border-right: none; /* Eliminar borde en móvil */
+        padding-top: 60px; /* Espacio para el botón */
     }
     
     .content-wrapper.nav-active {
-        margin-left: 0;
+        margin-left: 0; /* No empujar el contenido en móvil */
     }
 
-    .summary-cards {
-        grid-template-columns: 1fr;
-    }
-
-    .charts-container {
+    .dashboard-grid,
+    .reports-grid,
+    .settings-grid {
         grid-template-columns: 1fr;
     }
 
@@ -498,25 +614,45 @@ tr:hover {
 
     .main-nav ul {
         flex-direction: column; /* Apilar elementos del menú en móvil */
-        gap: 1rem;
-        text-align: center;
+        gap: 0.5rem; /* Espacio entre ítems del menú */
+        text-align: left; /* Alinear a la izquierda en móvil */
     }
 
     .main-nav a {
-        justify-content: center;
+        justify-content: flex-start; /* Alinear contenido del enlace a la izquierda */
+    }
+
+    .menu-toggle-btn {
+         left: 10px; /* Ajustar posición en móvil */
+         top: 10px;
+         width: 40px;
+         height: 40px;
+         font-size: 1.3rem;
+    }
+
+    .main-nav.active ~ .menu-toggle-btn { /* Ajustar posición en móvil cuando el menú está activo */
+        left: calc(100vw - 50px); /* Mover a la derecha */
+    }
+
+    .date-inputs input {
+         display: block; /* Apilar inputs de fecha en móvil */
+         margin-right: 0;
+         margin-bottom: 10px;
+    }
+
+    .date-inputs input:last-child {
+        margin-bottom: 0;
     }
 }
 
 /* Animaciones */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.form-section,
-.table-container,
-.filters-section {
-    animation: fadeIn 0.5s ease-in-out;
+section {
+    animation: fadeIn 0.6s ease-out;
 }
 
 /* Mejoras de accesibilidad */
@@ -566,7 +702,7 @@ tr:hover {
 
 /* Mejoras de accesibilidad para enfoque */
 :focus {
-    outline: 3px solid var(--primary-color);
+    outline: 3px solid var(--secondary-color); /* Usar secondary para el outline */
     outline-offset: 2px;
 }
 
@@ -575,20 +711,20 @@ tr:hover {
 }
 
 :focus-visible {
-    outline: 3px solid var(--primary-color);
+    outline: 3px solid var(--secondary-color); /* Usar secondary para el outline */
     outline-offset: 2px;
 }
 
 /* Mejoras de accesibilidad para interacción */
 button:hover,
-input:hover,
-select:hover {
+input[type="submit"]:hover, /* Solo botones de submit */
+.delete-btn:hover { /* Añadir el botón de eliminar */
     cursor: pointer;
 }
 
 button:active,
-input:active,
-select:active {
+input[type="submit"]:active,
+.delete-btn:active {
     transform: scale(0.98);
 }
 
@@ -600,23 +736,23 @@ select:active {
     }
 
     table {
-        font-size: 1rem;
+        font-size: 0.9rem; /* Tamaño de fuente ligeramente más pequeño en móvil */
     }
 
     th, td {
-        padding: 0.8rem;
+        padding: 0.8rem 0.5rem; /* Padding ajustado en móvil */
     }
 
     .delete-btn {
-        padding: 0.6rem 1rem;
-        font-size: 1rem;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
     }
 }
 
 /* Mejoras de accesibilidad para formularios */
 .form-group {
     position: relative;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem; /* Espacio ajustado */
 }
 
 /* Mejoras de accesibilidad para botones */
@@ -655,33 +791,20 @@ select:active {
 }
 
 /* Mejoras de accesibilidad para gráficos */
-.chart {
-    position: relative;
-}
-
-.chart::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.chart:hover::before {
-    opacity: 1;
+.chart-container canvas {
+    display: block; /* Evitar espacio extra */
+    max-width: 100%; /* Asegurar que no se salga del contenedor */
+    height: auto; /* Mantener proporción */
 }
 
 /* Ajustes generales para transiciones de tema */
-body, section, .section-help, label, input, select, th, td, .summary-card, .chart, .tooltip, .tooltip::after, .main-nav, .main-nav a, .menu-toggle-btn {
+body, section, .section-help, label, input, select, th, td, .summary-card, .chart-container, .tooltip, .tooltip::after, .main-nav, .main-nav a, .menu-toggle-btn, .dashboard-card, .report-card, .settings-card, .filters-section {
     transition: 
         background-color 0.5s ease,
         color 0.5s ease,
         border-color 0.5s ease,
-        box-shadow 0.5s ease;
+        box-shadow 0.5s ease, 
+        transform 0.3s ease; /* Añadir transición para transform */
 }
 
 /* Asegurar que los placehoders tengan color legible en modo oscuro */
@@ -689,53 +812,103 @@ body.dark-mode input::placeholder, body.dark-mode select::placeholder {
     color: #aaa; /* Un color claro para el placeholder */
 }
 
-/* Tema Oscuro */
+/* Tema Oscuro (ajustado) */
 body.dark-theme {
-    --background-color: #1a1a1a;
-    --text-color: #ffffff;
-    --border-color: #333333;
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
+    --background-color: #2c3e50; 
+    --text-color: #ecf0f1;
+    --border-color: #555;
+    --primary-color: #7ab8c7; /* Primary y Secondary invertidos o ajustados para contraste */
+    --secondary-color: #4a6d7c;
+
+    --body-bg: var(--background-color);
+    --section-bg: #34495e;
+    --text-color-body: var(--text-color);
+    --heading-color: var(--text-color);
+    --border-color-main: var(--border-color);
+    --table-header-bg: var(--primary-color);
+    --table-row-hover: #3f5a74;
+    --help-text-color-main: #bdc3c7;
+    --tooltip-bg: rgba(255, 255, 255, 0.8);
+    --tooltip-text: #333;
+    --section-help-bg: #3f5a74;
+    --nav-bg: #34495e;
+    --nav-link-color: var(--text-color);
+    --nav-link-hover: var(--primary-color); /* Usar primary del tema oscuro */
 }
 
-.dark-theme .form-section,
-.dark-theme .table-container,
-.dark-theme .filters-section {
-    background-color: #2d2d2d;
+.dark-theme .main-nav a i {
+    color: var(--primary-color); /* Íconos del menú con primary del tema oscuro */
 }
 
-.dark-theme .main-nav {
-    background-color: #2d2d2d;
+.dark-theme .dashboard-card p {
+    color: var(--primary-color); /* Balance con primary del tema oscuro */
 }
 
-.dark-theme .main-nav a {
-    color: #ffffff;
+.dark-theme h1 {
+    color: var(--primary-color); /* Título principal con primary del tema oscuro */
 }
 
-.dark-theme .main-nav a:hover {
-    background-color: #3d3d3d;
+.dark-theme h2 {
+    border-bottom-color: var(--secondary-color); /* Borde con secondary del tema oscuro */
 }
 
-/* Header y Navegación */
-header {
-    display: none; /* Ocultamos la barra superior */
+.dark-theme .section-help {
+    border-left-color: var(--secondary-color); /* Borde con secondary del tema oscuro */
 }
 
-.menu-toggle-btn {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    z-index: 1001;
-    transition: background-color var(--transition-speed);
+.dark-theme .form-group input:focus,
+.dark-theme .form-group select:focus {
+    border-color: var(--primary-color); /* Focus con primary del tema oscuro */
+     box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb, 122, 184, 199), 0.2); /* Sombra de focus */
 }
 
-.menu-toggle-btn:hover {
-    background-color: var(--secondary-color);
+.dark-theme .btn-large {
+    background-color: var(--primary-color); /* Botones con primary del tema oscuro */
+}
+
+.dark-theme .btn-large:hover {
+    background-color: #63a0ad; /* Tono de hover ajustado */
+}
+
+.dark-theme .delete-btn {
+     background-color: var(--accent-color); /* Eliminar con accent */
+}
+
+.dark-theme .delete-btn:hover {
+     background-color: #cc4132; /* Tono de hover de eliminar */
+}
+
+.dark-theme .download-btn {
+    background-color: var(--success-color); /* Descargar con success */
+}
+
+.dark-theme .download-btn:hover {
+     background-color: #27ae60; /* Tono de hover de descargar */
+}
+
+.dark-theme .menu-toggle-btn {
+    background-color: var(--primary-color); /* Botón de menú con primary */
+}
+
+.dark-theme .menu-toggle-btn:hover {
+    background-color: var(--secondary-color); /* Hover con secondary */
+}
+
+.dark-theme :focus {
+     outline-color: var(--primary-color); /* Outline con primary */
+}
+
+.dark-theme :focus-visible {
+     outline-color: var(--primary-color); /* Outline con primary */
+}
+
+/* Coordenadas RGB para sombras de focus */
+:root {
+     --primary-color-rgb: 74, 109, 124; /* RGB de #4a6d7c */
+     --secondary-color-rgb: 122, 184, 199; /* RGB de #7ab8c7 */
+}
+
+body.dark-theme {
+    --primary-color-rgb: 122, 184, 199; /* RGB de #7ab8c7 (primary oscuro) */
+    --secondary-color-rgb: 74, 109, 124; /* RGB de #4a6d7c (secondary oscuro) */
 } 
