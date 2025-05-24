@@ -107,7 +107,7 @@ header {
 }
 
 .main-nav {
-    background-color: var(--nav-bg); /* Usar variable de tema */
+    background-color: var(--nav-bg);
     box-shadow: var(--card-shadow);
     position: fixed;
     top: 0;
@@ -116,8 +116,9 @@ header {
     height: 100vh;
     transition: left var(--transition-speed);
     z-index: 1000;
-    padding-top: 20px; /* Añadimos espacio arriba */
-    border-right: 1px solid var(--border-color-main); /* Borde sutil */
+    padding-top: 80px; /* Ajustar padding para dejar espacio al botón */
+    border-right: 1px solid var(--border-color-main);
+    overflow-y: auto; /* Permitir scroll si hay muchos elementos */
 }
 
 .main-nav.active {
@@ -544,7 +545,7 @@ tr:hover {
     position: fixed;
     top: 20px;
     left: 20px;
-    background-color: var(--primary-color); /* Color basado en tema */
+    background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 50%;
@@ -561,12 +562,14 @@ tr:hover {
 }
 
 .menu-toggle-btn:hover {
-    background-color: var(--secondary-color); /* Color de hover */
+    background-color: var(--secondary-color);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.main-nav.active ~ .menu-toggle-btn { /* Usar el selector de hermano general ~ */
-    left: 270px; /* Mover el botón cuando el menú está activo */
+/* Ajustar la posición del botón cuando el menú está abierto */
+/* Usamos un selector más robusto por si la estructura HTML cambia ligeramente */
+body.nav-active .menu-toggle-btn {
+    left: 270px; /* Mover a la derecha del menú */
 }
 
 /* Responsive */
@@ -623,15 +626,16 @@ tr:hover {
     }
 
     .menu-toggle-btn {
-         left: 10px; /* Ajustar posición en móvil */
+         left: 10px;
          top: 10px;
          width: 40px;
          height: 40px;
          font-size: 1.3rem;
     }
 
-    .main-nav.active ~ .menu-toggle-btn { /* Ajustar posición en móvil cuando el menú está activo */
-        left: calc(100vw - 50px); /* Mover a la derecha */
+    /* Ajustar la posición del botón en móvil cuando el menú está abierto */
+    body.nav-active .menu-toggle-btn { 
+        left: calc(100vw - 50px); /* Mover a la derecha de la pantalla */
     }
 
     .date-inputs input {
@@ -911,4 +915,72 @@ body.dark-theme {
 body.dark-theme {
     --primary-color-rgb: 122, 184, 199; /* RGB de #7ab8c7 (primary oscuro) */
     --secondary-color-rgb: 74, 109, 124; /* RGB de #4a6d7c (secondary oscuro) */
+}
+
+/* Contenedor de notificaciones */
+#notificationContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000; /* Asegurar que esté por encima de todo */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px; /* Ancho máximo para las notificaciones */
+}
+
+/* Estilo base de notificación */
+.notification {
+    background-color: var(--section-bg); /* Fondo basado en tema */
+    color: var(--text-color-body); /* Texto basado en tema */
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    opacity: 0;
+    transform: translateX(100%); /* Empezar fuera de la pantalla */
+    animation: slideIn 0.5s ease-out forwards, fadeOut 0.5s ease-in forwards 2.5s; /* Animación de entrada y salida */
+    border-left: 5px solid transparent; /* Borde izquierdo para indicar tipo */
+    position: relative; /* Necesario para el pseudoelemento de cierre */
+}
+
+/* Tipos de notificación */
+.notification.success {
+    border-left-color: var(--success-color);
+}
+
+.notification.error {
+    border-left-color: var(--accent-color);
+}
+
+/* Animaciones de notificación */
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        display: none; /* Ocultar completamente al finalizar */
+    }
+}
+
+/* Botón de cerrar notificación (opcional, pero recomendado) */
+.notification .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--text-color-body); /* Color basado en tema */
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.notification .close-btn:hover {
+    opacity: 1;
 } 
