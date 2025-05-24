@@ -103,33 +103,7 @@ body {
 
 /* Header y Navegación */
 header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 1rem 0;
-    box-shadow: var(--card-shadow);
-    position: sticky;
-    top: 0;
-    z-index: 500;
-    transition: background-color 0.5s ease;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.menu-toggle-btn {
-    background-color: transparent;
-    color: var(--text-color-body); /* Usar color de texto del tema */
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.menu-toggle-btn:hover {
-    color: var(--secondary-color);
+    display: none; /* Ocultamos la barra superior */
 }
 
 .main-nav {
@@ -142,6 +116,7 @@ header {
     height: 100vh;
     transition: left var(--transition-speed);
     z-index: 1000;
+    padding-top: 20px; /* Añadimos espacio arriba */
 }
 
 .main-nav.active {
@@ -182,6 +157,7 @@ header {
 .content-wrapper {
     margin-left: 0;
     padding: 20px;
+    padding-top: 80px; /* Añadimos espacio para el botón del menú */
     transition: margin-left var(--transition-speed);
 }
 
@@ -738,4 +714,28 @@ body.dark-theme {
 
 .dark-theme .main-nav a:hover {
     background-color: #3d3d3d;
+}
+
+/* Header y Navegación */
+header {
+    display: none; /* Ocultamos la barra superior */
+}
+
+.menu-toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1001;
+    transition: background-color var(--transition-speed);
+}
+
+.menu-toggle-btn:hover {
+    background-color: var(--secondary-color);
 } 

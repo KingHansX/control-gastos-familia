@@ -1,6 +1,7 @@
 // Variables globales
 let transactions = [];
 let currentSection = 'dashboard';
+let isMenuOpen = false;
 
 // Elementos del DOM
 const menuToggle = document.getElementById('menuToggle');
@@ -21,15 +22,27 @@ function setupEventListeners() {
     // Menú lateral
     menuToggle.addEventListener('click', toggleMenu);
     
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (isMenuOpen && !mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+    // Cerrar menú al cambiar el tamaño de la ventana
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && isMenuOpen) {
+            closeMenu();
+        }
+    });
+    
     // Navegación
     document.querySelectorAll('.main-nav a').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const section = e.target.closest('a').dataset.section;
             showSection(section);
-            if (window.innerWidth <= 768) {
-                toggleMenu();
-            }
+            closeMenu();
         });
     });
 
@@ -54,8 +67,25 @@ function setupEventListeners() {
 
 // Funciones de navegación
 function toggleMenu() {
-    mainNav.classList.toggle('active');
-    contentWrapper.classList.toggle('nav-active');
+    if (isMenuOpen) {
+        closeMenu();
+    } else {
+        openMenu();
+    }
+}
+
+function openMenu() {
+    mainNav.classList.add('active');
+    contentWrapper.classList.add('nav-active');
+    isMenuOpen = true;
+    menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+}
+
+function closeMenu() {
+    mainNav.classList.remove('active');
+    contentWrapper.classList.remove('nav-active');
+    isMenuOpen = false;
+    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
 }
 
 function showSection(sectionId) {
