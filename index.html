@@ -17,48 +17,68 @@
 
     <header>
         <div class="container header-content">
-            <h1><i class="fas fa-wallet"></i> Control de Gastos e Ingresos Familiares</h1>
             <button id="menuToggle" class="menu-toggle-btn">
-                <i class="fas fa-bars"></i> Menú
+                <i class="fas fa-bars"></i>
             </button>
+            <h1><i class="fas fa-wallet"></i> Control de Gastos e Ingresos</h1>
         </div>
     </header>
 
     <nav id="mainNav" class="main-nav">
         <ul>
-            <li><a href="#" data-section="home"><i class="fas fa-home"></i> Inicio</a></li>
-            <li><a href="#" data-section="expenseFormSection"><i class="fas fa-receipt"></i> Gastos</a></li>
-            <li><a href="#" data-section="incomeFormSection"><i class="fas fa-money-bill-wave"></i> Ingresos</a></li>
-            <li><a href="#" data-section="summarySection"><i class="fas fa-chart-pie"></i> Resumen</a></li>
-            <li><a href="#" data-section=""><i class="fas fa-cog"></i> Configuración</a></li>
+            <li><a href="#" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#" data-section="expenseFormSection"><i class="fas fa-receipt"></i> Registrar Gasto</a></li>
+            <li><a href="#" data-section="incomeFormSection"><i class="fas fa-money-bill-wave"></i> Registrar Ingreso</a></li>
+            <li><a href="#" data-section="transactions"><i class="fas fa-list"></i> Transacciones</a></li>
+            <li><a href="#" data-section="reports"><i class="fas fa-chart-pie"></i> Reportes</a></li>
+            <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Configuración</a></li>
         </ul>
     </nav>
 
     <div class="content-wrapper container">
+        <!-- Dashboard -->
+        <section id="dashboard" class="dashboard-section">
+            <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Balance Total</h3>
+                    <p class="balance-amount" id="totalBalance">$0.00</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Ingresos del Mes</h3>
+                    <p class="income-amount" id="monthlyIncome">$0.00</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Gastos del Mes</h3>
+                    <p class="expense-amount" id="monthlyExpenses">$0.00</p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="balanceChart"></canvas>
+            </div>
+        </section>
+
         <!-- Formulario de registro de ingresos -->
         <section id="incomeFormSection" class="form-section income-section">
             <h2><i class="fas fa-money-bill-wave"></i> Registrar Nuevo Ingreso</h2>
-            <p class="section-help">Complete el formulario para registrar un nuevo ingreso familiar.</p>
             <form id="incomeForm">
                 <div class="form-group">
                     <label for="incomeDate">
-                        <i class="fas fa-calendar"></i> Fecha:
+                        <i class="fas fa-calendar"></i> Fecha
                     </label>
                     <input type="date" id="incomeDate" required>
-                    <span class="help-text">Seleccione la fecha en que recibió el ingreso</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="incomeAmount">
-                        <i class="fas fa-coins"></i> Monto:
+                        <i class="fas fa-coins"></i> Monto
                     </label>
                     <input type="number" id="incomeAmount" step="0.01" min="0" required>
-                    <span class="help-text">Ingrese la cantidad recibida</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="incomeSource">
-                        <i class="fas fa-funnel-dollar"></i> Fuente del Ingreso:
+                        <i class="fas fa-funnel-dollar"></i> Fuente del Ingreso
                     </label>
                     <select id="incomeSource" required>
                         <option value="">Seleccione una fuente</option>
@@ -67,20 +87,18 @@
                         <option value="Regalo">Regalo</option>
                         <option value="Otro">Otro</option>
                     </select>
-                    <span class="help-text">Seleccione de dónde proviene el ingreso</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="incomeDescription">
-                        <i class="fas fa-align-left"></i> Descripción:
+                        <i class="fas fa-align-left"></i> Descripción
                     </label>
                     <input type="text" id="incomeDescription" required>
-                    <span class="help-text">Escriba una breve descripción del ingreso</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="incomePerson">
-                        <i class="fas fa-user"></i> Persona:
+                        <i class="fas fa-user"></i> Persona
                     </label>
                     <select id="incomePerson" required>
                         <option value="">Seleccione una persona</option>
@@ -88,7 +106,6 @@
                         <option value="Mamá">Mamá</option>
                         <option value="Hijo/a">Hijo/a</option>
                     </select>
-                    <span class="help-text">Seleccione quién recibió el ingreso</span>
                 </div>
                 
                 <button type="submit" class="btn-large">
@@ -100,27 +117,24 @@
         <!-- Formulario de registro de gastos -->
         <section id="expenseFormSection" class="form-section expense-section">
             <h2><i class="fas fa-receipt"></i> Registrar Nuevo Gasto</h2>
-            <p class="section-help">Complete el formulario para registrar un nuevo gasto familiar.</p>
             <form id="expenseForm">
                 <div class="form-group">
                     <label for="date">
-                        <i class="fas fa-calendar"></i> Fecha:
+                        <i class="fas fa-calendar"></i> Fecha
                     </label>
                     <input type="date" id="date" required>
-                    <span class="help-text">Seleccione la fecha del gasto</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="amount">
-                        <i class="fas fa-coins"></i> Monto:
+                        <i class="fas fa-coins"></i> Monto
                     </label>
                     <input type="number" id="amount" step="0.01" min="0" required>
-                    <span class="help-text">Ingrese la cantidad gastada</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="category">
-                        <i class="fas fa-tags"></i> Categoría:
+                        <i class="fas fa-tags"></i> Categoría
                     </label>
                     <select id="category" required>
                         <option value="">Seleccione una categoría</option>
@@ -130,20 +144,18 @@
                         <option value="Entretenimiento">Entretenimiento</option>
                         <option value="Otros">Otros</option>
                     </select>
-                    <span class="help-text">Seleccione el tipo de gasto</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="description">
-                        <i class="fas fa-align-left"></i> Descripción:
+                        <i class="fas fa-align-left"></i> Descripción
                     </label>
                     <input type="text" id="description" required>
-                    <span class="help-text">Escriba una breve descripción del gasto</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="paymentMethod">
-                        <i class="fas fa-credit-card"></i> Método de Pago:
+                        <i class="fas fa-credit-card"></i> Método de Pago
                     </label>
                     <select id="paymentMethod" required>
                         <option value="">Seleccione método de pago</option>
@@ -151,12 +163,11 @@
                         <option value="Tarjeta">Tarjeta</option>
                         <option value="Transferencia">Transferencia</option>
                     </select>
-                    <span class="help-text">Seleccione cómo realizó el pago</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="person">
-                        <i class="fas fa-user"></i> Persona:
+                        <i class="fas fa-user"></i> Persona
                     </label>
                     <select id="person" required>
                         <option value="">Seleccione una persona</option>
@@ -164,7 +175,6 @@
                         <option value="Mamá">Mamá</option>
                         <option value="Hijo/a">Hijo/a</option>
                     </select>
-                    <span class="help-text">Seleccione quién realizó el gasto</span>
                 </div>
                 
                 <button type="submit" class="btn-large">
@@ -173,151 +183,148 @@
             </form>
         </section>
 
-        <!-- Filtros -->
-        <section class="filters-section">
-            <h2><i class="fas fa-filter"></i> Filtros</h2>
-            <p class="section-help">Use los filtros para ver registros específicos.</p>
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="dateRange">
-                        <i class="fas fa-calendar-alt"></i> Rango de Fechas:
-                    </label>
-                    <div class="date-inputs">
-                        <input type="date" id="startDate" placeholder="Fecha inicial">
-                        <input type="date" id="endDate" placeholder="Fecha final">
+        <!-- Sección de Transacciones -->
+        <section id="transactions" class="transactions-section">
+            <h2><i class="fas fa-list"></i> Transacciones</h2>
+            <div class="filters-section">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="dateRange">
+                            <i class="fas fa-calendar-alt"></i> Rango de Fechas
+                        </label>
+                        <div class="date-inputs">
+                            <input type="date" id="startDate" placeholder="Fecha inicial">
+                            <input type="date" id="endDate" placeholder="Fecha final">
+                        </div>
                     </div>
-                    <span class="help-text">Seleccione el período que desea ver</span>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="filterPerson">
-                        <i class="fas fa-users"></i> Persona:
-                    </label>
-                    <select id="filterPerson">
-                        <option value="">Todas</option>
-                        <option value="Papá">Papá</option>
-                        <option value="Mamá">Mamá</option>
-                        <option value="Hijo/a">Hijo/a</option>
-                    </select>
-                    <span class="help-text">Filtrar por persona</span>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="filterType">
-                        <i class="fas fa-exchange-alt"></i> Tipo:
-                    </label>
-                    <select id="filterType">
-                        <option value="">Todos</option>
-                        <option value="gasto">Gastos</option>
-                        <option value="ingreso">Ingresos</option>
-                    </select>
-                    <span class="help-text">Filtrar por tipo de registro</span>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="filterCategory">
-                        <i class="fas fa-tags"></i> Categoría/Fuente:
-                    </label>
-                    <select id="filterCategory">
-                        <option value="">Todas</option>
-                        <optgroup label="Gastos">
-                            <option value="Comida">Comida</option>
-                            <option value="Transporte">Transporte</option>
-                            <option value="Salud">Salud</option>
-                            <option value="Entretenimiento">Entretenimiento</option>
-                            <option value="Otros">Otros</option>
-                        </optgroup>
-                        <optgroup label="Ingresos">
-                            <option value="Sueldo">Sueldo</option>
-                            <option value="Venta">Venta</option>
-                            <option value="Regalo">Regalo</option>
-                            <option value="Otro">Otro</option>
-                        </optgroup>
-                    </select>
-                    <span class="help-text">Filtrar por categoría o fuente</span>
+                    
+                    <div class="filter-group">
+                        <label for="filterPerson">
+                            <i class="fas fa-users"></i> Persona
+                        </label>
+                        <select id="filterPerson">
+                            <option value="">Todas</option>
+                            <option value="Papá">Papá</option>
+                            <option value="Mamá">Mamá</option>
+                            <option value="Hijo/a">Hijo/a</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterType">
+                            <i class="fas fa-exchange-alt"></i> Tipo
+                        </label>
+                        <select id="filterType">
+                            <option value="">Todos</option>
+                            <option value="gasto">Gastos</option>
+                            <option value="ingreso">Ingresos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterCategory">
+                            <i class="fas fa-tags"></i> Categoría/Fuente
+                        </label>
+                        <select id="filterCategory">
+                            <option value="">Todas</option>
+                            <optgroup label="Gastos">
+                                <option value="Comida">Comida</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Salud">Salud</option>
+                                <option value="Entretenimiento">Entretenimiento</option>
+                                <option value="Otros">Otros</option>
+                            </optgroup>
+                            <optgroup label="Ingresos">
+                                <option value="Sueldo">Sueldo</option>
+                                <option value="Venta">Venta</option>
+                                <option value="Regalo">Regalo</option>
+                                <option value="Otro">Otro</option>
+                            </optgroup>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Tabla de ingresos -->
-        <section class="income-section">
-            <h2><i class="fas fa-money-bill-wave"></i> Ingresos Registrados</h2>
             <div class="table-container">
-                <table id="incomeTable">
+                <table id="transactionsTable">
                     <thead>
                         <tr>
                             <th><i class="fas fa-calendar"></i> Fecha</th>
-                            <th><i class="fas fa-coins"></i> Monto</th>
-                            <th><i class="fas fa-funnel-dollar"></i> Fuente</th>
-                            <th><i class="fas fa-align-left"></i> Descripción</th>
-                            <th><i class="fas fa-user"></i> Persona</th>
-                            <th><i class="fas fa-cog"></i> Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="incomeTableBody"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Tabla de gastos -->
-        <section class="expenses-section">
-            <h2><i class="fas fa-receipt"></i> Gastos Registrados</h2>
-            <div class="table-container">
-                <table id="expensesTable">
-                    <thead>
-                        <tr>
-                            <th><i class="fas fa-calendar"></i> Fecha</th>
+                            <th><i class="fas fa-exchange-alt"></i> Tipo</th>
                             <th><i class="fas fa-coins"></i> Monto</th>
                             <th><i class="fas fa-tags"></i> Categoría</th>
-                            <th><i class="fas fa-align-left"></i> Descripción</th>
-                            <th><i class="fas fa-credit-card"></i> Método de Pago</th>
                             <th><i class="fas fa-user"></i> Persona</th>
+                            <th><i class="fas fa-align-left"></i> Descripción</th>
                             <th><i class="fas fa-cog"></i> Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="expensesTableBody"></tbody>
+                    <tbody id="transactionsTableBody">
+                        <!-- Las transacciones se cargarán dinámicamente -->
+                    </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- Resumen y gráficos -->
-        <section id="summarySection" class="summary-section">
-            <h2><i class="fas fa-chart-pie"></i> Resumen Mensual</h2>
-            <div class="summary-container">
-                <div class="summary-cards">
-                    <div class="summary-card">
-                        <h3><i class="fas fa-money-bill-wave"></i> Total Ingresos</h3>
-                        <p id="monthlyIncome">$0.00</p>
-                    </div>
-                    <div class="summary-card">
-                        <h3><i class="fas fa-receipt"></i> Total Gastos</h3>
-                        <p id="monthlyExpenses">$0.00</p>
-                    </div>
-                    <div class="summary-card">
-                        <h3><i class="fas fa-balance-scale"></i> Saldo</h3>
-                        <p id="monthlyBalance">$0.00</p>
-                    </div>
+        <!-- Sección de Reportes -->
+        <section id="reports" class="reports-section">
+            <h2><i class="fas fa-chart-pie"></i> Reportes</h2>
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Gastos por Categoría</h3>
+                    <canvas id="expensesByCategoryChart"></canvas>
                 </div>
-                
-                <div class="charts-container">
-                    <div class="chart">
-                        <canvas id="incomePieChart"></canvas>
-                    </div>
-                    <div class="chart">
-                        <canvas id="expensePieChart"></canvas>
-                    </div>
-                    <div class="chart">
-                        <canvas id="comparisonChart"></canvas>
-                    </div>
+                <div class="report-card">
+                    <h3>Ingresos por Fuente</h3>
+                    <canvas id="incomeBySourceChart"></canvas>
                 </div>
+                <div class="report-card">
+                    <h3>Balance Mensual</h3>
+                    <canvas id="monthlyBalanceChart"></canvas>
+                </div>
+            </div>
+            <div class="export-section">
+                <button class="download-btn" id="exportData">
+                    <i class="fas fa-download"></i> Exportar Datos
+                </button>
             </div>
         </section>
 
-        <!-- Botón para descargar CSV -->
-        <button id="downloadCSV" class="download-btn btn-large">
-            <i class="fas fa-download"></i> Descargar Datos (CSV)
-        </button>
+        <!-- Sección de Configuración -->
+        <section id="settings" class="settings-section">
+            <h2><i class="fas fa-cog"></i> Configuración</h2>
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>Preferencias Generales</h3>
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label for="currency">
+                                <i class="fas fa-dollar-sign"></i> Moneda
+                            </label>
+                            <select id="currency">
+                                <option value="MXN">Peso Mexicano (MXN)</option>
+                                <option value="USD">Dólar Americano (USD)</option>
+                                <option value="EUR">Euro (EUR)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateFormat">
+                                <i class="fas fa-calendar"></i> Formato de Fecha
+                            </label>
+                            <select id="dateFormat">
+                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-large">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html> 

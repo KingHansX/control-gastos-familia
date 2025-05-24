@@ -1,601 +1,539 @@
-// Clase para manejar los gastos e ingresos
-class FinanceManager {
-    constructor() {
-        this.expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-        this.incomes = JSON.parse(localStorage.getItem('incomes')) || [];
-        this.loadThemePreference(); // Cargar preferencia de tema al iniciar
-        this.initializeEventListeners();
-        this.updateUI();
-        this.initializeTooltips();
-        this.initializeMenuToggle(); // Inicializar funcionalidad del menú
-        this.initializeNavigation(); // Inicializar funcionalidad de navegación
-    }
+// Variables globales
+let transactions = [];
+let currentSection = 'dashboard';
 
-    // Cargar preferencia de tema desde localStorage
-    loadThemePreference() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
-        } else {
-            document.body.classList.remove('dark-mode');
-            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro';
-        }
-    }
+// Elementos del DOM
+const menuToggle = document.getElementById('menuToggle');
+const mainNav = document.getElementById('mainNav');
+const contentWrapper = document.querySelector('.content-wrapper');
+const themeToggle = document.getElementById('themeToggle');
 
-    // Inicializar event listeners
-    initializeEventListeners() {
-        // Formulario de gastos
-        document.getElementById('expenseForm').addEventListener('submit', (e) => {
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+    loadTransactions();
+    setupEventListeners();
+    showSection(currentSection);
+    updateDashboard();
+});
+
+// Configuración de event listeners
+function setupEventListeners() {
+    // Menú lateral
+    menuToggle.addEventListener('click', toggleMenu);
+    
+    // Navegación
+    document.querySelectorAll('.main-nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
             e.preventDefault();
-            this.addExpense();
+            const section = e.target.closest('a').dataset.section;
+            showSection(section);
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
         });
+    });
 
-        // Formulario de ingresos
-        document.getElementById('incomeForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.addIncome();
-        });
+    // Cambio de tema
+    themeToggle.addEventListener('click', toggleTheme);
 
-        // Filtros
-        document.getElementById('startDate').addEventListener('change', () => this.updateUI());
-        document.getElementById('endDate').addEventListener('change', () => this.updateUI());
-        document.getElementById('filterPerson').addEventListener('change', () => this.updateUI());
-        document.getElementById('filterType').addEventListener('change', () => this.updateUI());
-        document.getElementById('filterCategory').addEventListener('change', () => this.updateUI());
+    // Formularios
+    document.getElementById('incomeForm').addEventListener('submit', handleIncomeSubmit);
+    document.getElementById('expenseForm').addEventListener('submit', handleExpenseSubmit);
+    document.getElementById('settingsForm').addEventListener('submit', handleSettingsSubmit);
 
-        // Botón de descarga
-        document.getElementById('downloadCSV').addEventListener('click', () => this.downloadCSV());
+    // Filtros
+    document.getElementById('startDate').addEventListener('change', updateTransactionsTable);
+    document.getElementById('endDate').addEventListener('change', updateTransactionsTable);
+    document.getElementById('filterPerson').addEventListener('change', updateTransactionsTable);
+    document.getElementById('filterType').addEventListener('change', updateTransactionsTable);
+    document.getElementById('filterCategory').addEventListener('change', updateTransactionsTable);
 
-        // Botón de cambio de tema
-        document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+    // Exportar datos
+    document.getElementById('exportData').addEventListener('click', exportToCSV);
+}
 
-        // Inicializar tooltips
-        this.initializeTooltips();
-    }
+// Funciones de navegación
+function toggleMenu() {
+    mainNav.classList.toggle('active');
+    contentWrapper.classList.toggle('nav-active');
+}
 
-    // Inicializar la funcionalidad del menú expandible
-    initializeMenuToggle() {
-        const menuToggle = document.getElementById('menuToggle');
-        const mainNav = document.getElementById('mainNav');
-        const contentWrapper = document.querySelector('.content-wrapper');
+function showSection(sectionId) {
+    // Ocultar todas las secciones
+    document.querySelectorAll('.content-wrapper > section').forEach(section => {
+        section.style.display = 'none';
+    });
 
-        menuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('expanded');
-            document.body.classList.toggle('menu-open'); // Clase para empujar contenido en móvil
-        });
-
-        // Cerrar menú al hacer clic fuera en móvil (opcional, requiere detección de clic fuera)
-        // También puedes cerrarlo al hacer clic en un enlace del menú
-        mainNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) { // Cerrar solo en móviles
-                    mainNav.classList.remove('expanded');
-                    document.body.classList.remove('menu-open');
-                }
-            });
-        });
-    }
-
-    // Inicializar funcionalidad de navegación (smooth scroll)
-    initializeNavigation() {
+    // Mostrar la sección seleccionada
+    const selectedSection = document.getElementById(sectionId);
+    if (selectedSection) {
+        selectedSection.style.display = 'block';
+        currentSection = sectionId;
+        
+        // Actualizar la navegación activa
         document.querySelectorAll('.main-nav a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                const sectionId = link.getAttribute('data-section');
-                if (sectionId) { // Asegurarse de que el data-section no esté vacío
-                    e.preventDefault(); // Prevenir el comportamiento por defecto del enlace
-                    if (sectionId === 'home') {
-                         // Desplazarse al inicio de la página o a la primera sección relevante
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    } else {
-                        const targetSection = document.getElementById(sectionId);
-                        if (targetSection) {
-                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    }
-
-                    // Cerrar menú en móvil después de hacer clic (si está abierto)
-                     const mainNav = document.getElementById('mainNav');
-                     if (mainNav.classList.contains('expanded') && window.innerWidth <= 768) {
-                         mainNav.classList.remove('expanded');
-                         document.body.classList.remove('menu-open');
-                     }
-                }
-            });
-        });
-    }
-
-    // Inicializar tooltips
-    initializeTooltips() {
-        const tooltipElements = document.querySelectorAll('[data-tooltip]');
-        tooltipElements.forEach(element => {
-            element.addEventListener('mouseenter', (e) => {
-                const tooltip = document.createElement('div');
-                tooltip.className = 'tooltip';
-                tooltip.textContent = e.target.dataset.tooltip;
-                document.body.appendChild(tooltip);
-
-                const rect = e.target.getBoundingClientRect();
-                tooltip.style.top = `${rect.bottom + 5}px`;
-                tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
-                tooltip.style.opacity = '1';
-            });
-
-            element.addEventListener('mouseleave', () => {
-                const tooltip = document.querySelector('.tooltip');
-                if (tooltip) {
-                    tooltip.remove();
-                }
-            });
-        });
-    }
-
-    // Alternar tema (claro/oscuro)
-    toggleTheme() {
-        if (document.body.classList.contains('dark-mode')) {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light');
-            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i> Modo Oscuro';
-        } else {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
-            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
-        }
-        // Puede que necesites actualizar los gráficos aquí si sus colores no responden a las variables CSS
-        this.updateCharts(this.getFilteredData().expenses, this.getFilteredData().incomes);
-    }
-
-    // Agregar nuevo gasto
-    addExpense() {
-        const expense = {
-            id: Date.now(),
-            date: document.getElementById('date').value,
-            amount: parseFloat(document.getElementById('amount').value),
-            category: document.getElementById('category').value,
-            description: document.getElementById('description').value,
-            paymentMethod: document.getElementById('paymentMethod').value,
-            person: document.getElementById('person').value,
-            type: 'gasto'
-        };
-
-        this.expenses.push(expense);
-        this.saveData();
-        this.updateUI();
-        this.showNotification('Gasto registrado exitosamente', 'success');
-        document.getElementById('expenseForm').reset();
-    }
-
-    // Agregar nuevo ingreso
-    addIncome() {
-        const income = {
-            id: Date.now(),
-            date: document.getElementById('incomeDate').value,
-            amount: parseFloat(document.getElementById('incomeAmount').value),
-            source: document.getElementById('incomeSource').value,
-            description: document.getElementById('incomeDescription').value,
-            person: document.getElementById('incomePerson').value,
-            type: 'ingreso'
-        };
-
-        this.incomes.push(income);
-        this.saveData();
-        this.updateUI();
-        this.showNotification('Ingreso registrado exitosamente', 'success');
-        document.getElementById('incomeForm').reset();
-    }
-
-    // Mostrar notificación
-    showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        // Animar entrada
-        setTimeout(() => {
-            notification.style.transform = 'translateY(0)';
-            notification.style.opacity = '1';
-        }, 100);
-
-        // Remover después de 3 segundos
-        setTimeout(() => {
-            notification.style.transform = 'translateY(-100%)';
-            notification.style.opacity = '0';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
-
-    // Eliminar gasto
-    deleteExpense(id) {
-        if (confirm('¿Está seguro de que desea eliminar este gasto?')) {
-            this.expenses = this.expenses.filter(expense => expense.id !== id);
-            this.saveData();
-            this.updateUI();
-            this.showNotification('Gasto eliminado exitosamente', 'info');
-        }
-    }
-
-    // Eliminar ingreso
-    deleteIncome(id) {
-        if (confirm('¿Está seguro de que desea eliminar este ingreso?')) {
-            this.incomes = this.incomes.filter(income => income.id !== id);
-            this.saveData();
-            this.updateUI();
-            this.showNotification('Ingreso eliminado exitosamente', 'info');
-        }
-    }
-
-    // Guardar datos en localStorage
-    saveData() {
-        localStorage.setItem('expenses', JSON.stringify(this.expenses));
-        localStorage.setItem('incomes', JSON.stringify(this.incomes));
-    }
-
-    // Obtener datos filtrados
-    getFilteredData() {
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        const person = document.getElementById('filterPerson').value;
-        const type = document.getElementById('filterType').value;
-        const category = document.getElementById('filterCategory').value;
-
-        let filteredExpenses = [...this.expenses];
-        let filteredIncomes = [...this.incomes];
-
-        // Aplicar filtros de fecha
-        if (startDate) {
-            filteredExpenses = filteredExpenses.filter(item => item.date >= startDate);
-            filteredIncomes = filteredIncomes.filter(item => item.date >= startDate);
-        }
-        if (endDate) {
-            filteredExpenses = filteredExpenses.filter(item => item.date <= endDate);
-            filteredIncomes = filteredIncomes.filter(item => item.date <= endDate);
-        }
-
-        // Aplicar filtro de persona
-        if (person) {
-            filteredExpenses = filteredExpenses.filter(item => item.person === person);
-            filteredIncomes = filteredIncomes.filter(item => item.person === person);
-        }
-
-        // Aplicar filtro de tipo
-        if (type === 'gasto') {
-            filteredIncomes = [];
-        } else if (type === 'ingreso') {
-            filteredExpenses = [];
-        }
-
-        // Aplicar filtro de categoría/fuente
-        if (category) {
-            filteredExpenses = filteredExpenses.filter(item => item.category === category);
-            filteredIncomes = filteredIncomes.filter(item => item.source === category);
-        }
-
-        return { expenses: filteredExpenses, incomes: filteredIncomes };
-    }
-
-    // Actualizar la interfaz de usuario
-    updateUI() {
-        const { expenses, incomes } = this.getFilteredData();
-        this.updateExpensesTable(expenses);
-        this.updateIncomesTable(incomes);
-        this.updateSummary(expenses, incomes);
-        this.updateCharts(expenses, incomes);
-    }
-
-    // Actualizar tabla de gastos
-    updateExpensesTable(expenses) {
-        const tbody = document.getElementById('expensesTableBody');
-        tbody.innerHTML = '';
-
-        expenses.forEach(expense => {
-            const row = document.createElement('tr');
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(20px)';
-            row.innerHTML = `
-                <td>${expense.date}</td>
-                <td>$${expense.amount.toFixed(2)}</td>
-                <td>${expense.category}</td>
-                <td>${expense.description}</td>
-                <td>${expense.paymentMethod}</td>
-                <td>${expense.person}</td>
-                <td>
-                    <button onclick="financeManager.deleteExpense(${expense.id})" class="delete-btn" data-tooltip="Eliminar este gasto">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(row);
-
-            // Animar entrada
-            setTimeout(() => {
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
-            }, 100);
-        });
-    }
-
-    // Actualizar tabla de ingresos
-    updateIncomesTable(incomes) {
-        const tbody = document.getElementById('incomeTableBody');
-        tbody.innerHTML = '';
-
-        incomes.forEach(income => {
-            const row = document.createElement('tr');
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(20px)';
-            row.innerHTML = `
-                <td>${income.date}</td>
-                <td>$${income.amount.toFixed(2)}</td>
-                <td>${income.source}</td>
-                <td>${income.description}</td>
-                <td>${income.person}</td>
-                <td>
-                    <button onclick="financeManager.deleteIncome(${income.id})" class="delete-btn" data-tooltip="Eliminar este ingreso">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(row);
-
-            // Animar entrada
-            setTimeout(() => {
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
-            }, 100);
-        });
-    }
-
-    // Actualizar resumen
-    updateSummary(expenses, incomes) {
-        // Totales
-        const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-        const totalIncomes = incomes.reduce((sum, income) => sum + income.amount, 0);
-        const balance = totalIncomes - totalExpenses;
-
-        // Actualizar elementos del DOM con animación
-        this.animateValue('monthlyExpenses', totalExpenses);
-        this.animateValue('monthlyIncome', totalIncomes);
-        this.animateValue('monthlyBalance', balance);
-        
-        const balanceElement = document.getElementById('monthlyBalance');
-        balanceElement.className = balance >= 0 ? 'positive-balance' : 'negative-balance';
-    }
-
-    // Animar cambio de valor
-    animateValue(elementId, newValue) {
-        const element = document.getElementById(elementId);
-        const start = parseFloat(element.textContent.replace('$', '')) || 0;
-        const end = newValue;
-        const duration = 1000;
-        const startTime = performance.now();
-
-        const animate = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-
-            const current = start + (end - start) * progress;
-            element.textContent = `$${current.toFixed(2)}`;
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            }
-        };
-
-        requestAnimationFrame(animate);
-    }
-
-    // Actualizar gráficos
-    updateCharts(expenses, incomes) {
-        // Datos para gráficos
-        const expenseCategories = {};
-        const incomeSources = {};
-        const monthlyData = {
-            expenses: {},
-            incomes: {}
-        };
-        
-        // Procesar gastos
-        expenses.forEach(expense => {
-            expenseCategories[expense.category] = (expenseCategories[expense.category] || 0) + expense.amount;
-            const month = expense.date.substring(0, 7);
-            monthlyData.expenses[month] = (monthlyData.expenses[month] || 0) + expense.amount;
+            link.classList.toggle('active', link.dataset.section === sectionId);
         });
 
-        // Procesar ingresos
-        incomes.forEach(income => {
-            incomeSources[income.source] = (incomeSources[income.source] || 0) + income.amount;
-            const month = income.date.substring(0, 7);
-            monthlyData.incomes[month] = (monthlyData.incomes[month] || 0) + income.amount;
-        });
-
-        // Gráfico de pastel para ingresos
-        const incomePieCtx = document.getElementById('incomePieChart').getContext('2d');
-        if (window.incomePieChart instanceof Chart) {
-            window.incomePieChart.destroy();
+        // Actualizar contenido específico de la sección
+        switch(sectionId) {
+            case 'dashboard':
+                updateDashboard();
+                break;
+            case 'transactions':
+                updateTransactionsTable();
+                break;
+            case 'reports':
+                updateReports();
+                break;
         }
-        window.incomePieChart = new Chart(incomePieCtx, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(incomeSources),
-                datasets: [{
-                    data: Object.values(incomeSources),
-                    backgroundColor: [
-                        '#50c878',
-                        '#98fb98',
-                        '#90ee90',
-                        '#32cd32',
-                        '#228b22'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Ingresos por Fuente',
-                        font: {
-                            size: 16
-                        }
-                    },
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 14
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de pastel para gastos
-        const expensePieCtx = document.getElementById('expensePieChart').getContext('2d');
-        if (window.expensePieChart instanceof Chart) {
-            window.expensePieChart.destroy();
-        }
-        window.expensePieChart = new Chart(expensePieCtx, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(expenseCategories),
-                datasets: [{
-                    data: Object.values(expenseCategories),
-                    backgroundColor: [
-                        '#ff6b6b',
-                        '#ff8c8c',
-                        '#ffa07a',
-                        '#ff6347',
-                        '#ff4500'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Gastos por Categoría',
-                        font: {
-                            size: 16
-                        }
-                    },
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 14
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de comparación
-        const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
-        if (window.comparisonChart instanceof Chart) {
-            window.comparisonChart.destroy();
-        }
-        
-        // Obtener todos los meses únicos
-        const allMonths = [...new Set([
-            ...Object.keys(monthlyData.expenses),
-            ...Object.keys(monthlyData.incomes)
-        ])].sort();
-
-        window.comparisonChart = new Chart(comparisonCtx, {
-            type: 'bar',
-            data: {
-                labels: allMonths,
-                datasets: [
-                    {
-                        label: 'Ingresos',
-                        data: allMonths.map(month => monthlyData.incomes[month] || 0),
-                        backgroundColor: '#50c878'
-                    },
-                    {
-                        label: 'Gastos',
-                        data: allMonths.map(month => monthlyData.expenses[month] || 0),
-                        backgroundColor: '#ff6b6b'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Comparativa Ingresos vs Gastos',
-                        font: {
-                            size: 16
-                        }
-                    },
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 14
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 12
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    // Descargar datos como CSV
-    downloadCSV() {
-        const headers = ['Tipo', 'Fecha', 'Monto', 'Categoría/Fuente', 'Descripción', 'Método de Pago', 'Persona'];
-        
-        const csvContent = [
-            headers.join(','),
-            ...this.expenses.map(expense => [
-                'Gasto',
-                expense.date,
-                expense.amount,
-                expense.category,
-                expense.description,
-                expense.paymentMethod,
-                expense.person
-            ].join(',')),
-            ...this.incomes.map(income => [
-                'Ingreso',
-                income.date,
-                income.amount,
-                income.source,
-                income.description,
-                '',
-                income.person
-            ].join(','))
-        ].join('\n');
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `finanzas_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
-        this.showNotification('Archivo CSV descargado exitosamente', 'success');
     }
 }
 
-// Inicializar la aplicación
-const financeManager = new FinanceManager(); 
+// Funciones de tema
+function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+    const isDark = document.body.classList.contains('dark-theme');
+    themeToggle.innerHTML = isDark ? 
+        '<i class="fas fa-sun"></i> Modo Claro' : 
+        '<i class="fas fa-moon"></i> Modo Oscuro';
+    localStorage.setItem('darkTheme', isDark);
+}
+
+// Funciones de manejo de datos
+function loadTransactions() {
+    const savedTransactions = localStorage.getItem('transactions');
+    if (savedTransactions) {
+        transactions = JSON.parse(savedTransactions);
+    }
+}
+
+function saveTransactions() {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+// Funciones de manejo de formularios
+function handleIncomeSubmit(e) {
+    e.preventDefault();
+    const income = {
+        id: Date.now(),
+        type: 'ingreso',
+        date: document.getElementById('incomeDate').value,
+        amount: parseFloat(document.getElementById('incomeAmount').value),
+        category: document.getElementById('incomeSource').value,
+        description: document.getElementById('incomeDescription').value,
+        person: document.getElementById('incomePerson').value
+    };
+    
+    transactions.push(income);
+    saveTransactions();
+    updateTransactionsTable();
+    updateDashboard();
+    e.target.reset();
+    showSection('dashboard');
+}
+
+function handleExpenseSubmit(e) {
+    e.preventDefault();
+    const expense = {
+        id: Date.now(),
+        type: 'gasto',
+        date: document.getElementById('date').value,
+        amount: parseFloat(document.getElementById('amount').value),
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        person: document.getElementById('person').value
+    };
+    
+    transactions.push(expense);
+    saveTransactions();
+    updateTransactionsTable();
+    updateDashboard();
+    e.target.reset();
+    showSection('dashboard');
+}
+
+function handleSettingsSubmit(e) {
+    e.preventDefault();
+    const settings = {
+        currency: document.getElementById('currency').value,
+        dateFormat: document.getElementById('dateFormat').value
+    };
+    localStorage.setItem('settings', JSON.stringify(settings));
+    updateAllDisplays();
+}
+
+// Funciones de actualización de UI
+function updateDashboard() {
+    const now = new Date();
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    const monthlyTransactions = transactions.filter(t => new Date(t.date) >= firstDayOfMonth);
+    const monthlyIncome = monthlyTransactions
+        .filter(t => t.type === 'ingreso')
+        .reduce((sum, t) => sum + t.amount, 0);
+    const monthlyExpenses = monthlyTransactions
+        .filter(t => t.type === 'gasto')
+        .reduce((sum, t) => sum + t.amount, 0);
+    const totalBalance = monthlyIncome - monthlyExpenses;
+
+    document.getElementById('monthlyIncome').textContent = formatCurrency(monthlyIncome);
+    document.getElementById('monthlyExpenses').textContent = formatCurrency(monthlyExpenses);
+    document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
+
+    updateBalanceChart();
+}
+
+function updateTransactionsTable() {
+    const tbody = document.getElementById('transactionsTableBody');
+    tbody.innerHTML = '';
+
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const person = document.getElementById('filterPerson').value;
+    const type = document.getElementById('filterType').value;
+    const category = document.getElementById('filterCategory').value;
+
+    let filteredTransactions = transactions;
+
+    if (startDate) {
+        filteredTransactions = filteredTransactions.filter(t => t.date >= startDate);
+    }
+    if (endDate) {
+        filteredTransactions = filteredTransactions.filter(t => t.date <= endDate);
+    }
+    if (person) {
+        filteredTransactions = filteredTransactions.filter(t => t.person === person);
+    }
+    if (type) {
+        filteredTransactions = filteredTransactions.filter(t => t.type === type);
+    }
+    if (category) {
+        filteredTransactions = filteredTransactions.filter(t => t.category === category);
+    }
+
+    filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    filteredTransactions.forEach(transaction => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${formatDate(transaction.date)}</td>
+            <td>${transaction.type === 'ingreso' ? 'Ingreso' : 'Gasto'}</td>
+            <td class="${transaction.type === 'ingreso' ? 'income' : 'expense'}">
+                ${formatCurrency(transaction.amount)}
+            </td>
+            <td>${transaction.category}</td>
+            <td>${transaction.person}</td>
+            <td>${transaction.description}</td>
+            <td>
+                <button onclick="deleteTransaction(${transaction.id})" class="delete-btn">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function updateReports() {
+    updateExpensesByCategoryChart();
+    updateIncomeBySourceChart();
+    updateMonthlyBalanceChart();
+}
+
+// Funciones de utilidad
+function formatCurrency(amount) {
+    const settings = JSON.parse(localStorage.getItem('settings')) || { currency: 'MXN' };
+    return new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: settings.currency
+    }).format(amount);
+}
+
+function formatDate(dateString) {
+    const settings = JSON.parse(localStorage.getItem('settings')) || { dateFormat: 'DD/MM/YYYY' };
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    switch(settings.dateFormat) {
+        case 'MM/DD/YYYY':
+            return `${month}/${day}/${year}`;
+        case 'YYYY-MM-DD':
+            return `${year}-${month}-${day}`;
+        default:
+            return `${day}/${month}/${year}`;
+    }
+}
+
+function deleteTransaction(id) {
+    if (confirm('¿Está seguro de que desea eliminar esta transacción?')) {
+        transactions = transactions.filter(t => t.id !== id);
+        saveTransactions();
+        updateTransactionsTable();
+        updateDashboard();
+    }
+}
+
+function exportToCSV() {
+    const headers = ['Fecha', 'Tipo', 'Monto', 'Categoría', 'Persona', 'Descripción'];
+    const csvContent = [
+        headers.join(','),
+        ...transactions.map(t => [
+            formatDate(t.date),
+            t.type,
+            t.amount,
+            t.category,
+            t.person,
+            t.description
+        ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `transacciones_${formatDate(new Date())}.csv`;
+    link.click();
+}
+
+// Funciones de gráficos
+function updateBalanceChart() {
+    const ctx = document.getElementById('balanceChart').getContext('2d');
+    const last6Months = Array.from({length: 6}, (_, i) => {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        return date;
+    }).reverse();
+
+    const data = last6Months.map(date => {
+        const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+        const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        
+        const monthTransactions = transactions.filter(t => {
+            const transDate = new Date(t.date);
+            return transDate >= monthStart && transDate <= monthEnd;
+        });
+
+        const income = monthTransactions
+            .filter(t => t.type === 'ingreso')
+            .reduce((sum, t) => sum + t.amount, 0);
+        const expenses = monthTransactions
+            .filter(t => t.type === 'gasto')
+            .reduce((sum, t) => sum + t.amount, 0);
+
+        return {
+            month: date.toLocaleString('es-ES', { month: 'short' }),
+            income,
+            expenses,
+            balance: income - expenses
+        };
+    });
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.map(d => d.month),
+            datasets: [
+                {
+                    label: 'Ingresos',
+                    data: data.map(d => d.income),
+                    borderColor: '#27ae60',
+                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                    fill: true
+                },
+                {
+                    label: 'Gastos',
+                    data: data.map(d => d.expenses),
+                    borderColor: '#e74c3c',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    fill: true
+                },
+                {
+                    label: 'Balance',
+                    data: data.map(d => d.balance),
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Balance de los últimos 6 meses'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: value => formatCurrency(value)
+                    }
+                }
+            }
+        }
+    });
+}
+
+function updateExpensesByCategoryChart() {
+    const ctx = document.getElementById('expensesByCategoryChart').getContext('2d');
+    const expenses = transactions.filter(t => t.type === 'gasto');
+    const categories = [...new Set(expenses.map(e => e.category))];
+    
+    const data = categories.map(category => {
+        const total = expenses
+            .filter(e => e.category === category)
+            .reduce((sum, e) => sum + e.amount, 0);
+        return { category, total };
+    });
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: data.map(d => d.category),
+            datasets: [{
+                data: data.map(d => d.total),
+                backgroundColor: [
+                    '#e74c3c',
+                    '#3498db',
+                    '#2ecc71',
+                    '#f1c40f',
+                    '#9b59b6'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Gastos por Categoría'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: context => {
+                            const value = context.raw;
+                            return formatCurrency(value);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function updateIncomeBySourceChart() {
+    const ctx = document.getElementById('incomeBySourceChart').getContext('2d');
+    const incomes = transactions.filter(t => t.type === 'ingreso');
+    const sources = [...new Set(incomes.map(i => i.category))];
+    
+    const data = sources.map(source => {
+        const total = incomes
+            .filter(i => i.category === source)
+            .reduce((sum, i) => sum + i.amount, 0);
+        return { source, total };
+    });
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: data.map(d => d.source),
+            datasets: [{
+                data: data.map(d => d.total),
+                backgroundColor: [
+                    '#27ae60',
+                    '#3498db',
+                    '#2ecc71',
+                    '#f1c40f'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Ingresos por Fuente'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: context => {
+                            const value = context.raw;
+                            return formatCurrency(value);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function updateMonthlyBalanceChart() {
+    const ctx = document.getElementById('monthlyBalanceChart').getContext('2d');
+    const last12Months = Array.from({length: 12}, (_, i) => {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        return date;
+    }).reverse();
+
+    const data = last12Months.map(date => {
+        const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+        const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        
+        const monthTransactions = transactions.filter(t => {
+            const transDate = new Date(t.date);
+            return transDate >= monthStart && transDate <= monthEnd;
+        });
+
+        const income = monthTransactions
+            .filter(t => t.type === 'ingreso')
+            .reduce((sum, t) => sum + t.amount, 0);
+        const expenses = monthTransactions
+            .filter(t => t.type === 'gasto')
+            .reduce((sum, t) => sum + t.amount, 0);
+
+        return {
+            month: date.toLocaleString('es-ES', { month: 'short' }),
+            balance: income - expenses
+        };
+    });
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.map(d => d.month),
+            datasets: [{
+                label: 'Balance Mensual',
+                data: data.map(d => d.balance),
+                backgroundColor: data.map(d => d.balance >= 0 ? '#27ae60' : '#e74c3c')
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Balance Mensual'
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        callback: value => formatCurrency(value)
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Inicializar tema
+const savedTheme = localStorage.getItem('darkTheme');
+if (savedTheme === 'true') {
+    document.body.classList.add('dark-theme');
+    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Modo Claro';
+} 
